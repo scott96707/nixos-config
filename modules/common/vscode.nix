@@ -31,6 +31,12 @@
             version = "0.5.56";
             sha256 = "sha256-FAy2Cf2XnOnctBBATloXz8y4cLNHBoXAVnlw42CQzN8=";
           }
+          {
+            name = "pdf";
+            publisher = "tomoki1207";
+            version = "1.2.2";
+            sha256 = "sha256-i3Rlizbw4RtPkiEsodRJEB3AUzoqI95ohyqZ0ksROps=";
+          }
         ];
 
       userSettings = {
