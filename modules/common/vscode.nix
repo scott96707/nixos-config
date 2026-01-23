@@ -51,7 +51,7 @@
         # Base editor font size in points.
         "editor.fontSize" = 14;
         # Format files automatically on save.
-        "editor.formatOnSave" = true;
+        #"editor.formatOnSave" = true;
         # Use spaces when pressing Tab.
         "editor.insertSpaces" = true;
         # Hide the minimap to reduce visual noise.
