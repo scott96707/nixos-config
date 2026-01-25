@@ -25,9 +25,13 @@
       pull.rebase = true;
       push.autoSetupRemote = true;
       core.editor = "nvim";
-      
-      # Tell Git to use SSH for signing
+
+      # --- SSH commit signing (Git "Verified") ---
       gpg.format = "ssh";
+      commit.gpgsign = true;
+      user.signingkey = "~/.ssh/id_ed25519.pub"; # points to the PUBLIC key
+      # (optional) sign tags too:
+      # tag.gpgsign = true;
 
       # Tell git to use a "Verified badge" on commits
       commit.verbose = true;
@@ -40,12 +44,12 @@
         line-numbers = true;
         side-by-side = true;
       };
-      
+
       merge.conflictstyle = "diff3";
       diff.colorMoved = "default";
     };
-    
-    # SSH Signing (Works on both Mac and Linux)
+
+    # Home Manager convenience mapping (also sets commit.gpgsign + user.signingkey)
     signing = {
       signByDefault = true;
       key = "~/.ssh/id_ed25519.pub";
