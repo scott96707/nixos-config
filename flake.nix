@@ -16,56 +16,65 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, nix-darwin, sops-nix, ... }: {
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      home-manager,
+      nix-darwin,
+      sops-nix,
+      ...
+    }:
+    {
 
-    # --- 1. LINUX PC (NixOS) ---
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/nixos/configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.home = import ./hosts/nixos/home.nix;
-        }
-        sops-nix.nixosModules.sops
-      ];
-    };
+      # --- 1. LINUX PC (NixOS) ---
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/nixos/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.home = import ./hosts/nixos/home.nix;
+          }
+          sops-nix.nixosModules.sops
+        ];
+      };
 
-    # --- 2a. MACBOOK (Intel) ---
-    darwinConfigurations."macbook-intel" = nix-darwin.lib.darwinSystem {
-      system = "x86_64-darwin";
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/macbook/configuration.nix
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.extraSpecialArgs = { inherit inputs; };
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.work_machine = import ./hosts/macbook/home.nix;
-        }
-        sops-nix.darwinModules.sops
-      ];
-    };
+      # --- 2a. MACBOOK (Intel) ---
+      darwinConfigurations."macbook-intel" = nix-darwin.lib.darwinSystem {
+        system = "x86_64-darwin";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/macbook/configuration.nix
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.work_machine = import ./hosts/macbook/home.nix;
+          }
+          sops-nix.darwinModules.sops
+        ];
+      };
 
-    # --- 2b. MACBOOK (Apple Silicon / ARM) ---
-    darwinConfigurations."macbook-arm" = nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/macbook-arm/configuration.nix
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.extraSpecialArgs = { inherit inputs; };
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.work_machine = import ./hosts/macbook-arm/home.nix;
-        }
-        sops-nix.darwinModules.sops
-      ];
+      # --- 2b. MACBOOK (Apple Silicon / ARM) ---
+      darwinConfigurations."macbook-arm" = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/macbook-arm/configuration.nix
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.work_machine = import ./hosts/macbook-arm/home.nix;
+          }
+          sops-nix.darwinModules.sops
+        ];
+      };
     };
-  };
 }

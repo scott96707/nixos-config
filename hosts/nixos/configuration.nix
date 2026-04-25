@@ -191,6 +191,7 @@
     mesa
     nixd
     nixfmt
+    qbittorrent
     rclone
     sops
     vulkan-tools
