@@ -30,7 +30,6 @@
         mkalias
         coreutils
         nixd
-        nixfmt
       ];
 
       nix.settings = {

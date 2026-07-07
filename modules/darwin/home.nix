@@ -43,7 +43,6 @@
       fd
       htop
       jq
-      rclone
       ripgrep
       tree
     ];
@@ -78,44 +77,6 @@
           name = ${config.sops.placeholder.git-name}
           email = ${config.sops.placeholder.git-email}
       '';
-    };
-
-    # Google Drive configuration
-    sops.secrets.rclone_config = { }; # Expects 'rclone_config' in secrets.yaml
-
-    # This tells sops to write the file to ~/.config/rclone/rclone.conf
-    sops.templates."rclone.conf" = {
-      content = config.sops.placeholder.rclone_config;
-      path = "${config.xdg.configHome}/rclone/rclone.conf";
-    };
-
-    launchd.agents.google-drive-mount = {
-      enable = true;
-      config = {
-        Label = "org.nix-community.rclone-mount";
-        # Keep the PATH environment
-        EnvironmentVariables = {
-          PATH = "${pkgs.rclone}/bin:/usr/bin:/bin:/usr/sbin:/sbin";
-        };
-
-        ProgramArguments = [
-          "${pkgs.rclone}/bin/rclone"
-          "serve"
-          "webdav"
-          "secret:"
-          "--addr=127.0.0.1:8080"
-          "--config=${config.xdg.configHome}/rclone/rclone.conf"
-          "--vfs-cache-mode=full"
-          "--exclude=.DS_Store" # Stop trying to upload Mac metadata
-          "--vfs-read-chunk-size=32M" # Improve streaming stability
-          "--dir-cache-time=10s" # Refresh file list faster
-        ];
-
-        RunAtLoad = true;
-        KeepAlive = true;
-        StandardOutPath = "/tmp/rclone.out";
-        StandardErrorPath = "/tmp/rclone.err";
-      };
     };
   };
 }

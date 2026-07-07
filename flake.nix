@@ -26,6 +26,13 @@
       ...
     }:
     {
+      # `nix fmt` uses the same nixfmt-rfc-style already configured as the
+      # editor formatter, so the whole repo can be formatted consistently.
+      formatter = {
+        x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
+        x86_64-darwin = nixpkgs.legacyPackages.x86_64-darwin.nixfmt-rfc-style;
+        aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
+      };
 
       # --- 1. LINUX PC (NixOS) ---
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
@@ -71,7 +78,8 @@
             home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.work_machine = import ./hosts/macbook-arm/home.nix;
+            home-manager.users.${(import ./hosts/macbook-arm/local.nix).username} =
+              import ./hosts/macbook-arm/home.nix;
           }
           sops-nix.darwinModules.sops
         ];

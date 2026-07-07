@@ -139,39 +139,6 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  # Google Drive Service
-  systemd.services.google-drive-mount = {
-    description = "Mount Google Drive (Secret) via Rclone";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    serviceConfig = {
-      User = "home"; 
-      Group = "users";
-
-      Environment = "PATH=/run/wrappers/bin:/run/current-system/sw/bin";
-
-      ExecStartPre = [
-        "-/run/wrappers/bin/fusermount -uz /home/home/mnt/google_secret" 
-        "${pkgs.coreutils}/bin/mkdir -p /home/home/mnt/google_secret"
-      ]; 
-      ExecStart = ''
-      ${pkgs.rclone}/bin/rclone mount secret: /home/home/mnt/google_secret \
-        --config=/home/home/.config/rclone/rclone.conf \
-        --vfs-cache-mode full \
-        --vfs-cache-max-size 50G \
-        --dir-cache-time 1000h \
-        --attr-timeout 1000h \
-        --buffer-size 64M \
-        --vfs-read-chunk-size 32M \
-        --no-modtime \
-        --vfs-cache-max-age 24h
-      '';
-      ExecStop = "/run/wrappers/bin/fusermount -u /home/home/mnt/google_secret";
-      Restart = "on-failure";
-      RestartSec = "10s";
-    };
-  };
-
   # --- USERS ---
   users.users.home = {
     isNormalUser = true;
@@ -190,9 +157,7 @@
     exiftool
     mesa
     nixd
-    nixfmt
     qbittorrent
-    rclone
     sops
     vulkan-tools
   ];
@@ -210,10 +175,6 @@
 
   services.printing.enable = true;
   zramSwap.enable = true;
-
-  # Allow users to mount FUSE filesystems (Required for Rclone) so that google drive
-  # Won't throw errors on rebuilds
-  programs.fuse.userAllowOther = true;
 
   # --- SAMBA (File Sharing) ---
   # aka SMB in the configuration
