@@ -25,7 +25,7 @@
   # macOS Specific Aliases
   home.shellAliases = {
     cleanup = "nix-collect-garbage -d";
-    rebuild = "sudo darwin-rebuild switch --flake ~/nixos-config#macbook";
+    rebuild = "sudo darwin-rebuild switch --flake ~/nixos-config#macbook-intel";
   };
 
   # Packages for the Mac

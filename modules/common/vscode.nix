@@ -285,6 +285,14 @@
         # ── Telemetry ─────────────────────────────────────────────────────────
         "redhat.telemetry.enabled" = false;
 
+        # ── Updates ───────────────────────────────────────────────────────────
+        # VS Code is managed via Nix (pkgs.vscode), so disable its built-in
+        # self-updater. Otherwise it repeatedly prompts macOS to install a
+        # privileged helper tool to replace the (read-only) Nix store app.
+        "update.mode" = "none";
+        "extensions.autoUpdate" = false;
+        "extensions.autoCheckUpdates" = false;
+
         # ── Terminal ──────────────────────────────────────────────────────────
         "terminal.integrated.cursorStyle" = "line";
         "terminal.integrated.fontFamily" = "JetBrainsMono Nerd Font";
