@@ -40,10 +40,10 @@
             sha256 = "sha256-DbAGQnizAzvpITtPwG4BHflUwBUrmOWCO7hRDOr/YWQ=";
           }
           {
-            name = "chatgpt";
-            publisher = "openai";
-            version = "0.5.56";
-            sha256 = "sha256-FAy2Cf2XnOnctBBATloXz8y4cLNHBoXAVnlw42CQzN8=";
+            name = "claude-code";
+            publisher = "anthropic";
+            version = "2.1.202";
+            sha256 = "sha256-gtHPurMqM93UhE6VfqR8y/XiF0nICkrPxwlV+ca7Bd4=";
           }
           {
             name = "pdf";
