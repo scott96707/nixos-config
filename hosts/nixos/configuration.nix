@@ -1,11 +1,16 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ../../modules/common/common.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    ../../modules/common/common.nix
+  ];
 
   # --- BOOT & KERNEL ---
   boot.loader.systemd-boot.enable = true;
@@ -13,7 +18,10 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Filesystems & Drivers
-  boot.supportedFilesystems = [ "ntfs" "ntfs3" ];
+  boot.supportedFilesystems = [
+    "ntfs"
+    "ntfs3"
+  ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = [ "amdgpu" ];
 
@@ -32,7 +40,6 @@
   hardware.enableRedistributableFirmware = true;
   services.xserver.videoDrivers = [ "amdgpu" ];
   hardware.amdgpu.opencl.enable = true;
-
 
   # --- AUDIO FIXES (Wireplumber) ---
   environment.etc."wireplumber/main.lua.d/51-hdmi-priority.lua".text = ''
@@ -53,13 +60,13 @@
   fileSystems."/drives/aming" = {
     device = "/dev/disk/by-uuid/60F8ABD5F8ABA7AC";
     fsType = "ntfs3";
-    options = [ 
+    options = [
       "defaults"
-      "nofail" 
-      "uid=1000" 
-      "gid=100" 
-      "noauto"                     # Don't try to mount at boot
-      "x-systemd.automount"        # Mount on access
+      "nofail"
+      "uid=1000"
+      "gid=100"
+      "noauto" # Don't try to mount at boot
+      "x-systemd.automount" # Mount on access
       "x-systemd.idle-timeout=1min" # Unmount after 1 min of inactivity
       "x-systemd.device-timeout=5s" # If the label 'Mule' isn't found in 5s, stop trying
     ];
@@ -68,17 +75,17 @@
   fileSystems."/drives/mule" = {
     device = "/dev/disk/by-uuid/F81EE57C1EE533F2";
     fsType = "ntfs3";
-    options = [ 
+    options = [
       "defaults"
-      "nofail" 
-      "uid=1000" 
-      "gid=100" 
+      "nofail"
+      "uid=1000"
+      "gid=100"
       "noauto"
       "x-systemd.automount"
       "x-systemd.device-timeout=5s"
       "x-systemd.idle-timeout=1min"
-      "errors=continue"     # Don't panic the kernel if metadata is weird
-      "prele"               # Pre-read lead-in (helps ntfs3 stability)
+      "errors=continue" # Don't panic the kernel if metadata is weird
+      "prele" # Pre-read lead-in (helps ntfs3 stability)
     ];
   };
 
@@ -88,10 +95,18 @@
   networking.firewall = {
     enable = true;
     # IMPORTANT: Open 445/TCP (SMB) and 139/TCP (NetBIOS)
-    allowedTCPPorts = [ 445 139 5357 ];
-    allowedUDPPorts = [ 137 138 3702 ]; 
+    allowedTCPPorts = [
+      445
+      139
+      5357
+    ];
+    allowedUDPPorts = [
+      137
+      138
+      3702
+    ];
   };
-  
+
   # Specific Locale Overrides (Common sets defaults, this overrides specific formats)
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
@@ -106,7 +121,7 @@
   };
 
   nix.settings = {
-    # Change Nix download buffer size. I was getting errors about this. 
+    # Change Nix download buffer size. I was getting errors about this.
     # Increase to 268435456 (256MB) if this is still too small.
     download-buffer-size = 134217728; # 128 MB
     # Allow Nix to run a build job for each of the computer's cores.
@@ -118,9 +133,12 @@
   # --- DESKTOP ENVIRONMENT ---
   services.xserver.enable = true;
   services.displayManager.gdm.enable = true;
-  services.displayManager.gdm.wayland = true; 
+  services.displayManager.gdm.wayland = true;
   services.desktopManager.gnome.enable = true;
-  services.xserver.xkb = { layout = "us"; variant = ""; };
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
 
   # This prevents the machine from going to sleep
   systemd.targets.sleep.enable = false;
@@ -143,11 +161,13 @@
   users.users.home = {
     isNormalUser = true;
     description = "home";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     shell = pkgs.zsh;
-    packages = with pkgs; [];
+    packages = with pkgs; [ ];
   };
-
 
   # --- HOST SPECIFIC PACKAGES ---
   # GUI Apps and heavy tools specific to this desktop
@@ -171,6 +191,17 @@
     dedicatedServer.openFirewall = true;
     localNetworkGameTransfers.openFirewall = true;
   };
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
+    zlib
+    openssl
+    curl
+    alsa-lib # needed by Claude Code's VS Code extension audio-capture.node (voice input)
+    # add more if `ldd` on the binary shows missing libs
+  ];
+
   programs.gamemode.enable = true;
 
   services.printing.enable = true;
@@ -202,7 +233,7 @@
         # ExFAT compatibility
         "fruit:resource" = "file";
       };
-      
+
       "mule" = {
         "path" = "/drives/mule";
         "browseable" = "yes";
@@ -247,7 +278,7 @@
   sops = {
     defaultSopsFile = ../../secrets/secrets.yaml;
     age.keyFile = "/var/lib/sops-nix/key.txt";
-    
+
     secrets = {
       git-email = {
         owner = "home";
@@ -269,5 +300,5 @@
     };
   };
 
-  system.stateVersion = "23.05"; 
+  system.stateVersion = "23.05";
 }

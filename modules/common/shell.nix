@@ -11,6 +11,8 @@
       # Disable bell
       setopt NO_BEEP
       unsetopt BEEP
+
+      eval "$(direnv hook zsh)"
     '';
     # Disable audible bell
     initExtra = ''

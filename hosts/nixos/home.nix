@@ -25,7 +25,10 @@
 
   home.packages = with pkgs; [
     age
+    direnv
+    nix-direnv
     gcc
+    godot_4
     iptables
     libreoffice
     lsof
@@ -37,6 +40,11 @@
     wl-clipboard 
     yt-dlp
   ];
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
   home.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
 
