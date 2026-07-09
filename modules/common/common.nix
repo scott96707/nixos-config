@@ -27,7 +27,7 @@
     tree
     unzip
     wget
-    nixfmt-rfc-style
+    nixfmt
     silver-searcher
   ];
 

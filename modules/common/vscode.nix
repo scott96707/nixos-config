@@ -269,7 +269,7 @@
         # Enable the Nix language server.
         "nix.enableLanguageServer" = true;
         # Set nixfmt as the formatter.
-        "nix.formatterPath" = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
+        "nix.formatterPath" = "${pkgs.nixfmt}/bin/nixfmt";
         "nix.editor.formatOnSave" = true;
         "nix.editor.defaultFormatter" = "jnoortheen.nix-ide";
         # Use nixd for language server features.

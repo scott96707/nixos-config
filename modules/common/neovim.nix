@@ -7,6 +7,8 @@
   defaultEditor = true;
   viAlias = true;
   vimAlias = true;
+  withRuby = true;
+  withPython3 = true;
 
   # --- 1. PLUGINS (Replaces Lazy.nvim) ---
   plugins = with pkgs.vimPlugins; [
@@ -85,7 +87,7 @@
   ];
 
     # --- 2. GENERAL SETTINGS (Your vim.opt options) ---
-    extraLuaConfig = ''
+    initLua = ''
       vim.g.mapleader = " "
       vim.opt.clipboard = "unnamedplus"
 

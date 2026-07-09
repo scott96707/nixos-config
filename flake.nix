@@ -2,12 +2,12 @@
   description = "Multi-platform Nix Configuration (NixOS Desktop & MacBooks)";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    nix-darwin.url = "github:LnL7/nix-darwin/nix-darwin-25.11";
+    nix-darwin.url = "github:LnL7/nix-darwin/nix-darwin-26.05";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     sops-nix = {
@@ -26,12 +26,12 @@
       ...
     }:
     {
-      # `nix fmt` uses the same nixfmt-rfc-style already configured as the
+      # `nix fmt` uses the same nixfmt already configured as the
       # editor formatter, so the whole repo can be formatted consistently.
       formatter = {
-        x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
-        x86_64-darwin = nixpkgs.legacyPackages.x86_64-darwin.nixfmt-rfc-style;
-        aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
+        x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
+        x86_64-darwin = nixpkgs.legacyPackages.x86_64-darwin.nixfmt;
+        aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt;
       };
 
       # --- 1. LINUX PC (NixOS) ---
