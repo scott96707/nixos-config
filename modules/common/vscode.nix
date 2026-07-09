@@ -31,88 +31,25 @@
           tamasfe.even-better-toml
           tim-koehler.helm-intellisense
         ]
-        # Marketplace Extensions not packaged in pkgs.vscode-extensions
-        ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-          {
-            name = "vscode-edit-csv";
-            publisher = "janisdd";
-            version = "0.8.2";
-            sha256 = "sha256-DbAGQnizAzvpITtPwG4BHflUwBUrmOWCO7hRDOr/YWQ=";
-          }
-          {
-            name = "claude-code";
-            publisher = "anthropic";
-            version = "2.1.202";
-            arch = "linux-x64";
-            sha256 = "sha256-m1c/d6ZnIKxuzwh62BVITwOrU+O3iarvvzGy8O0Q2fg=";
-          }
-          {
-            name = "pdf";
-            publisher = "tomoki1207";
-            version = "1.2.2";
-            sha256 = "sha256-i3Rlizbw4RtPkiEsodRJEB3AUzoqI95ohyqZ0ksROps=";
-          }
-          {
-            name = "shades-of-purple";
-            publisher = "ahmadawais";
-            version = "7.3.6";
-            sha256 = "sha256-22ZywGew1Qh4YPi51JWTNQLKuz/nzx/iprUK96DQfYU=";
-          }
-          {
-            name = "hcl-lsp";
-            publisher = "bahramjoharshamshiri";
-            version = "0.2.5";
-            sha256 = "sha256-38uZ4TE69voqDuwzAmvcfZ9pQiyroiBNkx8ymygaHww=";
-          }
-          {
-            name = "copilot-theme";
-            publisher = "benjaminbenais";
-            version = "1.1.0";
-            sha256 = "sha256-6uBNlPQOGDmrnnW+sxYP0Int5kyjdPc2gJw61uQAQD8=";
-          }
-          {
-            name = "insert-unicode";
-            publisher = "brunnerh";
-            version = "0.15.1";
-            sha256 = "sha256-RHsq7JmlC+4zGSbDdovCZpjpSW+DvcmYnuz9f6F/N4g=";
-          }
-          {
-            name = "rewrap-revived";
-            publisher = "dnut";
-            version = "17.10.0";
-            sha256 = "sha256-lfQsX27n7BCaM/z5rzRvGzTnbyg+C9YiAgHAnHdtHDo=";
-          }
-          {
-            name = "fontawesome-autocomplete";
-            publisher = "janne252";
-            version = "1.3.2";
-            sha256 = "sha256-tG5IiYzwJkA1xwR5U0I/mdkxx5ioYgXTv9aLnmbSspI=";
-          }
-          {
-            name = "vscode-python-envs";
-            publisher = "ms-python";
-            version = "1.37.2026070201";
-            sha256 = "sha256-WHL0qIXMk+jEhvpEFl/Ljs5X/poPwkcQgxaUfxd54lg=";
-          }
-          {
-            name = "github-actions-vscode";
-            publisher = "omartawfik";
-            version = "2.7.0";
-            sha256 = "sha256-78yBMgIaG2eTCQRGlAEqpO08jCreohT7RDSzLDghMDs=";
-          }
-          {
-            name = "synthwave-vscode";
-            publisher = "robbowen";
-            version = "0.1.20";
-            sha256 = "sha256-J8igs+SQn967OK0PLNZtV9IOJRqwd+q9vmZ+p9eKSoU=";
-          }
-          {
-            name = "material-palenight-theme";
-            publisher = "whizkydee";
-            version = "2.0.4";
-            sha256 = "sha256-FpYqzzeLLVRhClMiMxusBXwTaJnqZbmneRnFTkV9nm8=";
-          }
-        ];
+        # Marketplace Extensions not packaged in pkgs.vscode-extensions.
+        # Sourced from nix-vscode-extensions, which tracks the VS Code
+        # Marketplace directly, so these stay current via `nix flake update`
+        # with no manual version/sha256 pins to maintain.
+        ++ (with pkgs.vscode-marketplace; [
+          janisdd.vscode-edit-csv
+          anthropic.claude-code
+          tomoki1207.pdf
+          ahmadawais.shades-of-purple
+          bahramjoharshamshiri.hcl-lsp
+          benjaminbenais.copilot-theme
+          brunnerh.insert-unicode
+          dnut.rewrap-revived
+          janne252.fontawesome-autocomplete
+          ms-python.vscode-python-envs
+          omartawfik.github-actions-vscode
+          robbowen.synthwave-vscode
+          whizkydee.material-palenight-theme
+        ]);
 
       keybindings = [
         {
