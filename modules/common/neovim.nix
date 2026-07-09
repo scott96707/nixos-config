@@ -73,13 +73,17 @@
 
     # Treesitter (Highlighting)
     # Note: We use 'withAllGrammars' so you don't need to manually install parsers
+    # Note: nixpkgs 26.05 rewrote 'nvim-treesitter' with a new minimal API: setup()
+    # only configures the parser install directory, and highlighting/indent are
+    # enabled per-buffer instead of via configs.setup({ highlight, indent }).
     {
       plugin = nvim-treesitter.withAllGrammars;
       config = ''
-        require('nvim-treesitter.configs').setup({
-          highlight = { enable = true },
-          indent = { enable = true },
-          auto_install = false, -- Nix handles this, so turn off auto-install
+        vim.api.nvim_create_autocmd('FileType', {
+          callback = function()
+            pcall(vim.treesitter.start)
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end,
         })
       '';
       type = "lua";
