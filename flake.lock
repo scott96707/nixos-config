@@ -21,6 +21,26 @@
         "type": "github"
       }
     },
+    "media-server": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783787526,
+        "narHash": "sha256-1Ext4A9OFcG5/v5otIO8g0Ob09R9LJf1Oa6Xj1u/5K0=",
+        "ref": "refs/heads/main",
+        "rev": "2b94be351499c5f7db90d8e8ad7053980176696e",
+        "revCount": 2,
+        "type": "git",
+        "url": "file:///home/home/projects/media-server"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/home/projects/media-server"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -81,6 +101,7 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "media-server": "media-server",
         "nix-darwin": "nix-darwin",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs",

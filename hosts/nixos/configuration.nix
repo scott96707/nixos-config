@@ -54,6 +54,18 @@
     })
   '';
 
+  # --- MEDIA SERVER ---
+  # Module comes from the media-server flake input (~/projects/media-server);
+  # it manages podman, the /drives/backup mount, firewall ports and autostart.
+  services.media-server = {
+    enable = true;
+    dataDriveUuid = "FEE8A53BE8A4F2D7"; # 1.4TB NTFS "Backup" drive (sda1)
+    composeFiles = [
+      "docker-compose.yml"
+      "docker-compose.gpu.yml" # AMD VAAPI transcoding; not on the future Pi
+    ];
+  };
+
   # --- STORAGE & MOUNTS ---
   services.fstrim.enable = true;
 
@@ -183,13 +195,6 @@
 
   # --- PROGRAMS ---
   programs.zsh.enable = true;
-
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-    localNetworkGameTransfers.openFirewall = true;
-  };
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [

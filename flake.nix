@@ -19,6 +19,14 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Homelab media server (Jellyfin + Arr stack). All of its system config
+    # lives in that repo's flake; this config only imports the module.
+    # After changing that repo: `nix flake update media-server` here.
+    media-server = {
+      url = "git+file:///home/home/projects/media-server";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -46,6 +54,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/nixos/configuration.nix
+          inputs.media-server.nixosModules.media-server
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
