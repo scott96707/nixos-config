@@ -27,6 +27,14 @@
       url = "git+file:///home/home/projects/media-server";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Homelab network layer (AdGuard Home DNS + Caddy reverse proxy). Same
+    # pattern as media-server: all system config lives in that repo's flake.
+    # After changing that repo: `nix flake update homelab-network` here.
+    homelab-network = {
+      url = "git+file:///home/home/projects/homelab-network";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -55,6 +63,7 @@
         modules = [
           ./hosts/nixos/configuration.nix
           inputs.media-server.nixosModules.media-server
+          inputs.homelab-network.nixosModules.homelab-network
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;

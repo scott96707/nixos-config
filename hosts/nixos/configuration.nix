@@ -62,9 +62,25 @@
     dataDriveUuid = "FEE8A53BE8A4F2D7"; # 1.4TB NTFS "Backup" drive (sda1)
     composeFiles = [
       "docker-compose.yml"
-      "docker-compose.gpu.yml" # AMD VAAPI transcoding; not on the future Pi
+      "docker-compose.gpu.yml" # AMD VAAPI transcoding; desktop-only
     ];
   };
+
+  # --- HOMELAB NETWORK (DNS + reverse proxy) ---
+  # Module comes from the homelab-network flake input
+  # (~/projects/homelab-network); it manages podman, firewall ports
+  # (53/80/443/3000) and autostart. Interim home for AdGuard Home + Caddy
+  # until dedicated hardware exists.
+  services.homelab-network.enable = true;
+
+  # This machine is becoming the LAN's DNS server: the router's DHCP will
+  # hand out this host's own IP as DNS. Pin real upstreams for the host
+  # itself so boot can't deadlock (image pulls need DNS before AdGuard is
+  # up). Verify after rebuild: `cat /etc/resolv.conf` should list these.
+  networking.nameservers = [
+    "9.9.9.9"
+    "1.1.1.1"
+  ];
 
   # --- STORAGE & MOUNTS ---
   services.fstrim.enable = true;
