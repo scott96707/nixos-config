@@ -48,12 +48,13 @@
       ...
     }:
     {
-      # `nix fmt` uses the same nixfmt already configured as the
-      # editor formatter, so the whole repo can be formatted consistently.
+      # `nix fmt` formats the whole repo with the same nixfmt already
+      # configured as the editor formatter (nixfmt-tree wraps nixfmt in
+      # treefmt so it can walk the tree; bare nixfmt only reads stdin).
       formatter = {
-        x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
-        x86_64-darwin = nixpkgs.legacyPackages.x86_64-darwin.nixfmt;
-        aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt;
+        x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
+        x86_64-darwin = nixpkgs.legacyPackages.x86_64-darwin.nixfmt-tree;
+        aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-tree;
       };
 
       # --- 1. LINUX PC (NixOS) ---

@@ -54,13 +54,13 @@
         "app.shield.optoutstudies.enabled" = false;
 
         # --- AI & BLOAT OPT-OUT ---
-        "browser.ml.enable" = false;             
-        "browser.ml.chat.enabled" = false;       
+        "browser.ml.enable" = false;
+        "browser.ml.chat.enabled" = false;
         "browser.ml.linkPreview.enabled" = false;
-        "browser.tabs.groups.smart.enabled" = false; 
-        "extensions.getAddons.showPane" = false; 
-        "browser.discovery.enabled" = false;     
-        
+        "browser.tabs.groups.smart.enabled" = false;
+        "extensions.getAddons.showPane" = false;
+        "browser.discovery.enabled" = false;
+
         # --- UX TWEAKS ---
         "browser.aboutConfig.showWarning" = false;
         "browser.toolbars.bookmarks.visibility" = "always";

@@ -25,7 +25,7 @@
       pull.rebase = true;
       push.autoSetupRemote = true;
       core.editor = "nvim";
-      
+
       # Tell Git to use SSH for signing
       gpg.format = "ssh";
 
@@ -40,11 +40,11 @@
         line-numbers = true;
         side-by-side = true;
       };
-      
+
       merge.conflictstyle = "diff3";
       diff.colorMoved = "default";
     };
-    
+
     # SSH Signing (Works on both Mac and Linux)
     signing = {
       signByDefault = true;

@@ -1,94 +1,93 @@
-
 { pkgs, ... }:
 
 {
   programs.neovim = {
-  enable = true;
-  defaultEditor = true;
-  viAlias = true;
-  vimAlias = true;
-  withRuby = true;
-  withPython3 = true;
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+    withRuby = true;
+    withPython3 = true;
 
-  # --- 1. PLUGINS (Replaces Lazy.nvim) ---
-  plugins = with pkgs.vimPlugins; [
-    
-    # Dependencies (Explicitly added to be safe)
-    plenary-nvim
-    nvim-web-devicons
-    nui-nvim
+    # --- 1. PLUGINS (Replaces Lazy.nvim) ---
+    plugins = with pkgs.vimPlugins; [
 
-    # Add Indent Blankline (Vertical Context Lines)
-    {
-      plugin = indent-blankline-nvim;
-      config = ''
-        require("ibl").setup({
-            scope = { enabled = true },  -- Highlight the current context
-            indent = { char = "│" },     -- Use a solid vertical bar
-        })
-      '';
-      type = "lua";
-    }
-    # Theme: Tokyo Night
-    {
-      plugin = tokyonight-nvim;
-      config = "vim.cmd[[colorscheme tokyonight]]";
-      type = "lua";
-    }
+      # Dependencies (Explicitly added to be safe)
+      plenary-nvim
+      nvim-web-devicons
+      nui-nvim
 
-    # File Explorer: Neo-tree
-    {
-      plugin = neo-tree-nvim;
-      config = ''
-        -- Keymaps for Neo-tree
-        vim.keymap.set('n', '<leader>e', ':Neotree toggle<CR>', { desc = 'Toggle Explorer' })
-      '';
-      type = "lua";
-    }
+      # Add Indent Blankline (Vertical Context Lines)
+      {
+        plugin = indent-blankline-nvim;
+        config = ''
+          require("ibl").setup({
+              scope = { enabled = true },  -- Highlight the current context
+              indent = { char = "│" },     -- Use a solid vertical bar
+          })
+        '';
+        type = "lua";
+      }
+      # Theme: Tokyo Night
+      {
+        plugin = tokyonight-nvim;
+        config = "vim.cmd[[colorscheme tokyonight]]";
+        type = "lua";
+      }
 
-    # Fuzzy Finder: Telescope
-    {
-      plugin = telescope-nvim;
-      config = ''
-        local builtin = require('telescope.builtin')
-        vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find File' })
-        vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Find Text' })
-      '';
-      type = "lua";
-    }
+      # File Explorer: Neo-tree
+      {
+        plugin = neo-tree-nvim;
+        config = ''
+          -- Keymaps for Neo-tree
+          vim.keymap.set('n', '<leader>e', ':Neotree toggle<CR>', { desc = 'Toggle Explorer' })
+        '';
+        type = "lua";
+      }
 
-    # Status Line: Lualine
-    {
-      plugin = lualine-nvim;
-      config = "require('lualine').setup()";
-      type = "lua";
-    }
+      # Fuzzy Finder: Telescope
+      {
+        plugin = telescope-nvim;
+        config = ''
+          local builtin = require('telescope.builtin')
+          vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find File' })
+          vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Find Text' })
+        '';
+        type = "lua";
+      }
 
-    # Autopairs
-    {
-      plugin = nvim-autopairs;
-      config = "require('nvim-autopairs').setup({})";
-      type = "lua";
-    }
+      # Status Line: Lualine
+      {
+        plugin = lualine-nvim;
+        config = "require('lualine').setup()";
+        type = "lua";
+      }
 
-    # Treesitter (Highlighting)
-    # Note: We use 'withAllGrammars' so you don't need to manually install parsers
-    # Note: nixpkgs 26.05 rewrote 'nvim-treesitter' with a new minimal API: setup()
-    # only configures the parser install directory, and highlighting/indent are
-    # enabled per-buffer instead of via configs.setup({ highlight, indent }).
-    {
-      plugin = nvim-treesitter.withAllGrammars;
-      config = ''
-        vim.api.nvim_create_autocmd('FileType', {
-          callback = function()
-            pcall(vim.treesitter.start)
-            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-          end,
-        })
-      '';
-      type = "lua";
-    }
-  ];
+      # Autopairs
+      {
+        plugin = nvim-autopairs;
+        config = "require('nvim-autopairs').setup({})";
+        type = "lua";
+      }
+
+      # Treesitter (Highlighting)
+      # Note: We use 'withAllGrammars' so you don't need to manually install parsers
+      # Note: nixpkgs 26.05 rewrote 'nvim-treesitter' with a new minimal API: setup()
+      # only configures the parser install directory, and highlighting/indent are
+      # enabled per-buffer instead of via configs.setup({ highlight, indent }).
+      {
+        plugin = nvim-treesitter.withAllGrammars;
+        config = ''
+          vim.api.nvim_create_autocmd('FileType', {
+            callback = function()
+              pcall(vim.treesitter.start)
+              vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            end,
+          })
+        '';
+        type = "lua";
+      }
+    ];
 
     # --- 2. GENERAL SETTINGS (Your vim.opt options) ---
     initLua = ''

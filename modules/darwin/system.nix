@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 {
   options.myDarwin = {
     username = lib.mkOption {
@@ -102,7 +107,8 @@
           "firefox"
           "macfuse"
           "rectangle"
-        ] ++ config.myDarwin.extraCasks;
+        ]
+        ++ config.myDarwin.extraCasks;
       };
 
       home-manager = {

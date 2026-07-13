@@ -120,33 +120,9 @@
   # --- NETWORKING ---
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
-  networking.firewall = {
-    enable = true;
-    # IMPORTANT: Open 445/TCP (SMB) and 139/TCP (NetBIOS)
-    allowedTCPPorts = [
-      445
-      139
-      5357
-    ];
-    allowedUDPPorts = [
-      137
-      138
-      3702
-    ];
-  };
-
-  # Specific Locale Overrides (Common sets defaults, this overrides specific formats)
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
+  # SMB/NetBIOS ports (445/139/137/138) are opened by
+  # `services.samba.openFirewall` below.
+  networking.firewall.enable = true;
 
   nix.settings = {
     # Change Nix download buffer size. I was getting errors about this.
@@ -308,7 +284,6 @@
       };
     };
 
-    # --- ADD THIS SECTION ---
     templates."git-user.conf" = {
       owner = "home";
       # This looks like a standard git config file

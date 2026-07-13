@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
   options.myHome = {
@@ -54,7 +60,11 @@
     launchd.agents.start-rectangle = {
       enable = true;
       config = {
-        ProgramArguments = [ "/usr/bin/open" "-a" "Rectangle" ];
+        ProgramArguments = [
+          "/usr/bin/open"
+          "-a"
+          "Rectangle"
+        ];
         RunAtLoad = true;
         KeepAlive = false; # Don't restart it if I quit it manually
         ProcessType = "Interactive";

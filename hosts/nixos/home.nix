@@ -21,6 +21,7 @@
     VISUAL = "nvim";
     BROWSER = "firefox";
     SOPS_AGE_KEY_FILE = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+    MOZ_ENABLE_WAYLAND = "1";
   };
 
   home.packages = with pkgs; [
@@ -37,7 +38,7 @@
     tcpdump
     transmission_4-qt
     vlc
-    wl-clipboard 
+    wl-clipboard
     yt-dlp
   ];
 
@@ -45,8 +46,6 @@
     enable = true;
     nix-direnv.enable = true;
   };
-
-  home.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
 
   # Disable Gnome donation reminder
   dconf.settings = {
@@ -56,10 +55,10 @@
   };
 
   home.shellAliases = {
-    fix-mule="sudo umount -l /drives/mule && sudo ntfsfix -d /dev/disk/by-uuid/F81EE57C1EE533F2";
+    fix-mule = "sudo umount -l /drives/mule && sudo ntfsfix -d /dev/disk/by-uuid/F81EE57C1EE533F2";
     rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config/#nixos";
-    cleanup = "sudo nix-collect-garbage -d"; 
-    sunvim = "sudo -E nvim"; 
+    cleanup = "sudo nix-collect-garbage -d";
+    sunvim = "sudo -E nvim";
     pbcopy = "wl-copy";
     pbpaste = "wl-paste";
   };
@@ -71,7 +70,7 @@
       set enable-bracketed-paste off
       # Readline is how bash terminal handles
       # character inputs
-      '';
+    '';
   };
 
   programs.home-manager.enable = true;
