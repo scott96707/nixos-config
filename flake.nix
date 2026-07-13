@@ -69,6 +69,9 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            # If activation would clobber a file it doesn't own, move it
+            # aside as *.hm-backup instead of failing.
+            home-manager.backupFileExtension = "hm-backup";
             home-manager.users.home = import ./hosts/nixos/home.nix;
           }
           sops-nix.nixosModules.sops
@@ -86,6 +89,7 @@
             home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-backup";
             home-manager.users.work_machine = import ./hosts/macbook/home.nix;
           }
           sops-nix.darwinModules.sops
@@ -103,6 +107,7 @@
             home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-backup";
             home-manager.users.${(import ./hosts/macbook-arm/local.nix).username} =
               import ./hosts/macbook-arm/home.nix;
           }
