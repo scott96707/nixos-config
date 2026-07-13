@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ ... }:
+{
   programs.zsh = {
     enable = true;
     initContent = ''
@@ -14,8 +15,6 @@
 
       eval "$(direnv hook zsh)"
     '';
-    # Disable audible bell
-    initExtra = "";
   };
 
   programs.starship = {
@@ -23,7 +22,7 @@
     # Custom settings for Starship
     settings = {
       add_newline = false;
-      format = "$username$hostname$directory$git_branch$python$kubernetes$character";
+      format = "$username$hostname$directory$git_branch$git_status$nix_shell$python$cmd_duration$character";
 
       directory = {
         style = "bold blue";
@@ -37,6 +36,11 @@
 
       python = {
         format = "via [🐍 $version]($style) ";
+      };
+
+      # Only flag commands that actually took a while.
+      cmd_duration = {
+        min_time = 3000;
       };
     };
   };
