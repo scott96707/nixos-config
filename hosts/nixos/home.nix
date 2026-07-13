@@ -47,6 +47,21 @@
     nix-direnv.enable = true;
   };
 
+  # Homelab reminder: media-server (Jellyfin/Arr stack, ~/projects/media-server)
+  # and homelab-network (AdGuard/Caddy, ~/projects/homelab-network) autostart
+  # via systemd at boot. Surface their status on every new shell so a
+  # boot-time failure doesn't go unnoticed, and so they're never "forgotten".
+  programs.zsh.initContent = ''
+    for svc in media-server homelab-network; do
+      state=$(systemctl is-active "$svc" 2>/dev/null)
+      if [[ "$state" == "active" ]]; then
+        echo -e "\e[32m✓\e[0m $svc"
+      else
+        echo -e "\e[31m✗\e[0m $svc ($state) — systemctl status $svc"
+      fi
+    done
+  '';
+
   # Disable Gnome donation reminder
   dconf.settings = {
     "org/gnome/settings-daemon/plugins/housekeeping" = {
