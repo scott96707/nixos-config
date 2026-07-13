@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
   programs.zsh = {
     enable = true;
@@ -19,29 +19,66 @@
 
   programs.starship = {
     enable = true;
-    # Custom settings for Starship
-    settings = {
+    # Official catppuccin-powerline preset (matches wezterm's Catppuccin
+    # Mocha; needs a Nerd Font). Regenerate the base file with:
+    #   starship preset catppuccin-powerline -o starship-catppuccin-powerline.toml
+    # Local tweaks are merged on top below.
+    settings = lib.recursiveUpdate (fromTOML (builtins.readFile ./starship-catppuccin-powerline.toml)) {
       add_newline = false;
-      format = "$username$hostname$directory$git_branch$git_status$nix_shell$python$cmd_duration$character";
 
-      directory = {
-        style = "bold blue";
-      };
+      # The preset's format, plus $hostname in the red segment,
+      # $nix_shell in the green one, and $docker_context (which the
+      # preset styles but forgets to render).
+      # No $os badge: its default NixOS symbol is the same snowflake the
+      # nix_shell segment uses, and $hostname already identifies the
+      # machine. Keeps ❄ meaning "inside a nix shell" only.
+      format = lib.concatStrings [
+        "[](red)"
+        "$username"
+        "$hostname"
+        "[](bg:peach fg:red)"
+        "$directory"
+        "[](bg:yellow fg:peach)"
+        "$git_branch"
+        "$git_status"
+        "[](fg:yellow bg:green)"
+        "$nix_shell"
+        "$c"
+        "$rust"
+        "$golang"
+        "$nodejs"
+        "$bun"
+        "$php"
+        "$java"
+        "$kotlin"
+        "$haskell"
+        "$python"
+        "[](fg:green bg:sapphire)"
+        "$docker_context"
+        "$conda"
+        "[](fg:sapphire bg:lavender)"
+        "$time"
+        "[ ](fg:lavender)"
+        "$cmd_duration"
+        "$line_break"
+        "$character"
+      ];
 
+      # Always show which machine this is, like the old prompt did.
       hostname = {
         ssh_only = false;
-        format = "@[$hostname]($style) ";
-        style = "bold magenta";
+        style = "bg:red fg:crust";
+        format = "[@$hostname ]($style)";
       };
 
-      python = {
-        format = "via [🐍 $version]($style) ";
+      # Flag nix develop / nix-shell sessions.
+      nix_shell = {
+        style = "bg:green";
+        format = "[[ ❄ $state( ($name)) ](fg:crust bg:green)]($style)";
       };
 
       # Only flag commands that actually took a while.
-      cmd_duration = {
-        min_time = 3000;
-      };
+      cmd_duration.min_time = 3000;
     };
   };
 }
