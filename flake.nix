@@ -24,7 +24,7 @@
     # lives in that repo's flake; this config only imports the module.
     # After changing that repo: `nix flake update media-server` here.
     media-server = {
-      url = "git+file:///home/home/projects/media-server";
+      url = "git+ssh://git@github.com/scott96707/media-server";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -32,7 +32,7 @@
     # pattern as media-server: all system config lives in that repo's flake.
     # After changing that repo: `nix flake update homelab-network` here.
     homelab-network = {
-      url = "git+file:///home/home/projects/homelab-network";
+      url = "git+ssh://git@github.com/scott96707/homelab-network";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

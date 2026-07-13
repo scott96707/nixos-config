@@ -21,6 +21,26 @@
         "type": "github"
       }
     },
+    "homelab-network": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783908409,
+        "narHash": "sha256-pBT/tVpvdCXZ/DhbkdiL1Tk1boUYwtD7snzv1uQkWZM=",
+        "ref": "refs/heads/main",
+        "rev": "5ce233551018e5646920db2cad5461b175056ffa",
+        "revCount": 2,
+        "type": "git",
+        "url": "ssh://git@github.com/scott96707/homelab-network"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/scott96707/homelab-network"
+      }
+    },
     "media-server": {
       "inputs": {
         "nixpkgs": [
@@ -28,17 +48,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1783787526,
-        "narHash": "sha256-1Ext4A9OFcG5/v5otIO8g0Ob09R9LJf1Oa6Xj1u/5K0=",
+        "lastModified": 1783981573,
+        "narHash": "sha256-6awWYFi0mz/3YM7MFGYlYyQtv/lVYodjqA5xjn7i1e8=",
         "ref": "refs/heads/main",
-        "rev": "2b94be351499c5f7db90d8e8ad7053980176696e",
-        "revCount": 2,
+        "rev": "9b205c7687b01f38a60d9246aa0f6ea7a7e52a5f",
+        "revCount": 8,
         "type": "git",
-        "url": "file:///home/home/projects/media-server"
+        "url": "ssh://git@github.com/scott96707/media-server"
       },
       "original": {
         "type": "git",
-        "url": "file:///home/home/projects/media-server"
+        "url": "ssh://git@github.com/scott96707/media-server"
       }
     },
     "nix-darwin": {
@@ -101,6 +121,7 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "homelab-network": "homelab-network",
         "media-server": "media-server",
         "nix-darwin": "nix-darwin",
         "nix-vscode-extensions": "nix-vscode-extensions",
