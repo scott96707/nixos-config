@@ -19,7 +19,6 @@ in
         with pkgs.vscode-extensions;
         [
           jnoortheen.nix-ide
-          eamodio.gitlens
           ms-azuretools.vscode-docker
           ms-toolsai.jupyter
           davidanson.vscode-markdownlint
