@@ -111,11 +111,6 @@
         ++ config.myDarwin.extraCasks;
       };
 
-      home-manager = {
-        # This tells Home Manager: "If a file exists, back it up to 'filename.backup' and proceed"
-        backupFileExtension = "backup";
-      };
-
       # --- macOS Defaults ---
       system.defaults = {
 
