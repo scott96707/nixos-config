@@ -78,6 +78,20 @@
         ];
       };
 
+      # --- 1b. RASPBERRY PI 4 (NixOS, network appliance) ---
+      # Headless DNS/vault/VPN box (see ~/projects/homelab-network). No
+      # home-manager: nothing interactive runs here, and less machinery on
+      # the box that owns household DNS means less to break.
+      nixosConfigurations.pi = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/pi/configuration.nix
+          inputs.homelab-network.nixosModules.homelab-network
+          sops-nix.nixosModules.sops
+        ];
+      };
+
       # --- 2a. MACBOOK (Intel) ---
       darwinConfigurations."macbook-intel" = nix-darwin.lib.darwinSystem {
         system = "x86_64-darwin";
