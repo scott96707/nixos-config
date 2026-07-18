@@ -54,10 +54,10 @@
     })
   '';
 
-  # --- MEDIA SERVER: moved to the M3 (hosts/m3) ---
+  # --- MEDIA SERVER: moved to the DP21 (hosts/dp21) ---
   # This host no longer runs the stack, so the module import and the
   # /drives/backup NTFS mount (UUID FEE8A53BE8A4F2D7) are gone. Don't
-  # rebuild here until the media + config/ have been copied to the M3 —
+  # rebuild here until the media + config/ have been copied to the DP21 —
   # after a rebuild the drive stops auto-mounting (mount manually with
   # `mount -t ntfs3 /dev/disk/by-uuid/FEE8A53BE8A4F2D7 …` if needed).
 

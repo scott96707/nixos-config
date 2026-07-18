@@ -12,14 +12,17 @@
     ../../modules/common/common.nix
   ];
 
-  # --- HARDWARE (GMKtec NucBox M3, Micro Center) ---
-  # CPU:   Intel Core i5-12450H (Alder Lake, 8C/12T = 4P+4E, up to 4.4GHz)
-  # iGPU:  Intel UHD Graphics (Xe, 48 EU) — QuickSync: H.264/HEVC/VP9
+  # --- HARDWARE (MSI PRO DP21 13M-1242US, Micro Center) ---
+  # CPU:   Intel Core i5-14400 (Raptor Lake Refresh, 10C/16T = 6P+4E,
+  #        up to 4.7GHz, 65W desktop part)
+  # iGPU:  Intel UHD Graphics 730 (Xe, 24 EU) — QuickSync: H.264/HEVC/VP9
   #        encode+decode, AV1 decode only (no AV1 encode)
-  # RAM:   16GB DDR4-3200 (2x8GB, dual channel)
-  # Disk:  1TB NVMe SSD (media lives here until it fills — see media-server)
-  # Net:   2.5GbE RJ45 (wired to the Xfinity gateway) + WiFi 6
-  # Video: HDMI 2.0 (4K60) — future Moonlight client for the TV
+  # RAM:   16GB DDR5
+  # Disk:  500GB NVMe SSD (media lives here until it fills — see media-server)
+  # Net:   1GbE RJ45 (wired to the Xfinity gateway; NOT 2.5G on this model)
+  #        + WiFi (Intel AX201/AX211 depending on SKU)
+  # Video: HDMI 2.0 (4K60) + DisplayPort 1.4 — future Moonlight client
+  #        for the TV. 2.3L SFF case.
 
   # --- BOOT ---
   boot.loader.systemd-boot.enable = true;
@@ -64,7 +67,7 @@
   };
 
   # --- NETWORKING ---
-  networking.hostName = "m3";
+  networking.hostName = "dp21";
   # Wired-only appliance: default dhcpcd, no NetworkManager. Give it a DHCP
   # reservation on the router — Caddyfile upstreams and clients point here.
   networking.firewall.enable = true;
@@ -94,6 +97,10 @@
   };
 
   programs.zsh.enable = true;
+  # No home-manager on this host, so the desktop's `rebuild` alias doesn't
+  # exist here — define it system-wide. With no #attr, nixos-rebuild
+  # defaults to this host's hostname (dp21).
+  programs.zsh.shellAliases.rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
 
   system.stateVersion = "26.05";
 }

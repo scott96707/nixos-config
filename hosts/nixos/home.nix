@@ -49,7 +49,7 @@
 
   # Homelab reminder: homelab-network (AdGuard/Caddy, ~/projects/homelab-network)
   # autostarts via systemd at boot — interim home until the Pi takes over
-  # DNS. media-server moved to the M3 host. Surface status on every new
+  # DNS. media-server moved to the dp21 host. Surface status on every new
   # shell so a boot-time failure doesn't go unnoticed.
   programs.zsh.initContent = ''
     for svc in homelab-network; do

@@ -113,6 +113,10 @@
   };
 
   programs.zsh.enable = true;
+  # No home-manager on this host, so the desktop's `rebuild` alias doesn't
+  # exist here — define it system-wide. With no #attr, nixos-rebuild
+  # defaults to this host's hostname (pi).
+  programs.zsh.shellAliases.rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
 
   # --- HOST SPECIFIC PACKAGES ---
   environment.systemPackages = with pkgs; [

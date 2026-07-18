@@ -77,17 +77,17 @@
         ];
       };
 
-      # --- 1a. GMKTEC NUCBOX M3 (NixOS, media appliance) ---
+      # --- 1a. MSI PRO DP21 (NixOS, media appliance) ---
       # Headless media box (see ~/projects/media-server): Jellyfin + Arr
       # stack with Intel QuickSync transcoding, plus the homelab Prometheus
       # server (the Pi is scrape-target-only). No home-manager: appliance,
       # same reasoning as the Pi. Hardware specs are commented at the top
-      # of hosts/m3/configuration.nix.
-      nixosConfigurations.m3 = nixpkgs.lib.nixosSystem {
+      # of hosts/dp21/configuration.nix.
+      nixosConfigurations.dp21 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
-          ./hosts/m3/configuration.nix
+          ./hosts/dp21/configuration.nix
           inputs.media-server.nixosModules.media-server
           inputs.homelab-network.nixosModules.homelab-network
           sops-nix.nixosModules.sops
