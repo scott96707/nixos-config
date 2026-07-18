@@ -63,7 +63,6 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/nixos/configuration.nix
-          inputs.media-server.nixosModules.media-server
           inputs.homelab-network.nixosModules.homelab-network
           home-manager.nixosModules.home-manager
           {
@@ -74,6 +73,23 @@
             home-manager.backupFileExtension = "hm-backup";
             home-manager.users.home = import ./hosts/nixos/home.nix;
           }
+          sops-nix.nixosModules.sops
+        ];
+      };
+
+      # --- 1a. GMKTEC NUCBOX M3 (NixOS, media appliance) ---
+      # Headless media box (see ~/projects/media-server): Jellyfin + Arr
+      # stack with Intel QuickSync transcoding, plus the homelab Prometheus
+      # server (the Pi is scrape-target-only). No home-manager: appliance,
+      # same reasoning as the Pi. Hardware specs are commented at the top
+      # of hosts/m3/configuration.nix.
+      nixosConfigurations.m3 = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/m3/configuration.nix
+          inputs.media-server.nixosModules.media-server
+          inputs.homelab-network.nixosModules.homelab-network
           sops-nix.nixosModules.sops
         ];
       };

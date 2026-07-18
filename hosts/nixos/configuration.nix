@@ -54,17 +54,12 @@
     })
   '';
 
-  # --- MEDIA SERVER ---
-  # Module comes from the media-server flake input (~/projects/media-server);
-  # it manages podman, the /drives/backup mount, firewall ports and autostart.
-  services.media-server = {
-    enable = true;
-    dataDriveUuid = "FEE8A53BE8A4F2D7"; # 1.4TB NTFS "Backup" drive (sda1)
-    composeFiles = [
-      "docker-compose.yml"
-      "docker-compose.gpu.yml" # AMD VAAPI transcoding; desktop-only
-    ];
-  };
+  # --- MEDIA SERVER: moved to the M3 (hosts/m3) ---
+  # This host no longer runs the stack, so the module import and the
+  # /drives/backup NTFS mount (UUID FEE8A53BE8A4F2D7) are gone. Don't
+  # rebuild here until the media + config/ have been copied to the M3 —
+  # after a rebuild the drive stops auto-mounting (mount manually with
+  # `mount -t ntfs3 /dev/disk/by-uuid/FEE8A53BE8A4F2D7 …` if needed).
 
   # --- HOMELAB NETWORK (DNS + reverse proxy) ---
   # Module comes from the homelab-network flake input
