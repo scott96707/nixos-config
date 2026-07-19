@@ -1,5 +1,8 @@
-{ pkgs, osConfig, ... }:
+{ pkgs, ... }:
 
+let
+  identity = import ../common/git-identity.nix;
+in
 {
   # 1. Install Delta (The modern diff tool)
   home.packages = [ pkgs.delta ];
@@ -7,11 +10,12 @@
   programs.git = {
     enable = true;
 
-    includes = [
-      { path = osConfig.sops.templates."git-user.conf".path; }
-    ];
-
     settings = {
+      # Identity is plain data now, not a sops template include — see
+      # modules/common/git-identity.nix for why.
+      user.name = identity.name;
+      user.email = identity.email;
+
       aliases = {
         co = "checkout";
         ci = "commit";

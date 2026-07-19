@@ -6,6 +6,9 @@
   ...
 }:
 
+let
+  gitIdentity = import ../../modules/common/git-identity.nix;
+in
 {
   imports = [
     ../../modules/common/common.nix
@@ -127,6 +130,18 @@
     sops
     vim
   ];
+
+  # --- GIT IDENTITY ---
+  # System-level (/etc/gitconfig): no home-manager on this appliance either.
+  # Less load-bearing than on dp21 — nothing here runs from a checkout — but
+  # it makes an in-place `git commit` on nixos-config work rather than fail.
+  programs.git = {
+    enable = true;
+    config.user = {
+      name = gitIdentity.name;
+      email = gitIdentity.email;
+    };
+  };
 
   # --- SECRETS (sops-nix) ---
   # The Pi needs its own age key at /var/lib/sops-nix/key.txt (generate with

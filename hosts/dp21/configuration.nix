@@ -6,6 +6,9 @@
   ...
 }:
 
+let
+  gitIdentity = import ../../modules/common/git-identity.nix;
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -122,6 +125,20 @@
   environment.systemPackages = with pkgs; [
     vim
   ];
+
+  # --- GIT IDENTITY ---
+  # System-level (/etc/gitconfig) rather than home-manager: this box has no
+  # home-manager, and commits do get made here — the ~/projects checkouts are
+  # what the manga-aggregator and media-server units actually run from. Without
+  # this, `git commit` on dp21 fails outright or invents an identity from the
+  # hostname.
+  programs.git = {
+    enable = true;
+    config.user = {
+      name = gitIdentity.name;
+      email = gitIdentity.email;
+    };
+  };
 
   programs.zsh.enable = true;
   # No home-manager on this host, so the desktop's `rebuild`/`cleanup`

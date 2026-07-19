@@ -266,28 +266,13 @@
     };
   };
 
+  # Scaffolding only — git-name/git-email moved out to
+  # modules/common/git-identity.nix, and nothing else here needs a secret
+  # yet. Kept so the next real secret is a one-line addition; the age key at
+  # the path below must exist for that.
   sops = {
     defaultSopsFile = ../../secrets/secrets.yaml;
     age.keyFile = "/var/lib/sops-nix/key.txt";
-
-    secrets = {
-      git-email = {
-        owner = "home";
-      };
-      git-name = {
-        owner = "home";
-      };
-    };
-
-    templates."git-user.conf" = {
-      owner = "home";
-      # This looks like a standard git config file
-      content = ''
-        [user]
-          name = ${config.sops.placeholder.git-name}
-          email = ${config.sops.placeholder.git-email}
-      '';
-    };
   };
 
   system.stateVersion = "23.05";

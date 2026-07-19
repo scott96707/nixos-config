@@ -72,21 +72,15 @@
     };
 
     # SOPS configuration
+    # Scaffolding only — git-name/git-email moved out to
+    # modules/common/git-identity.nix, and no other secret is defined here
+    # yet. With zero secrets sops-nix is inert, so the age key below need not
+    # exist until something actually needs decrypting.
     sops = {
       defaultSopsFile = ./../../secrets/secrets.yaml;
       defaultSopsFormat = "yaml";
 
       age.keyFile = "/Users/${config.myHome.username}/.config/sops/age/keys.txt";
-
-      secrets.git-name = { };
-      secrets.git-email = { };
-
-      # This creates the file at ~/.config/sops-nix/secrets/templates/git-user.conf
-      templates."git-user.conf".content = ''
-        [user]
-          name = ${config.sops.placeholder.git-name}
-          email = ${config.sops.placeholder.git-email}
-      '';
     };
   };
 }
