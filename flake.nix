@@ -35,6 +35,14 @@
       url = "git+ssh://git@github.com/scott96707/homelab-network";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Manga library tracker/reader (Flask). Same pattern: the repo's flake
+    # exports the service module. After changing that repo:
+    # `nix flake update manga-aggregator` here.
+    manga-aggregator = {
+      url = "git+ssh://git@github.com/scott96707/manga-aggregator";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -90,6 +98,7 @@
           ./hosts/dp21/configuration.nix
           inputs.media-server.nixosModules.media-server
           inputs.homelab-network.nixosModules.homelab-network
+          inputs.manga-aggregator.nixosModules.manga-aggregator
           sops-nix.nixosModules.sops
         ];
       };

@@ -50,6 +50,15 @@
     ];
   };
 
+  # --- MANGA AGGREGATOR ---
+  # Module comes from the manga-aggregator flake input
+  # (~/projects/manga-aggregator); Flask app on :5050, systemd-managed.
+  # Needs a writable checkout at /home/home/projects/manga-aggregator with
+  # credentials.json + manga_reader.db in place (both gitignored — copy
+  # from wherever it last ran). FlareSolverr comes from the media-server
+  # stack on this same host (localhost:8191).
+  services.manga-aggregator.enable = true;
+
   # --- MONITORING (homelab-network flake input) ---
   # This box runs the Prometheus server (RAM to spare); the Pi is scrape-
   # target-only. Grafana Cloud free tier via monitoring.server.remoteWrite
