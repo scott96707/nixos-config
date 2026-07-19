@@ -100,10 +100,13 @@
   };
 
   programs.zsh.enable = true;
-  # No home-manager on this host, so the desktop's `rebuild` alias doesn't
-  # exist here — define it system-wide. With no #attr, nixos-rebuild
-  # defaults to this host's hostname (dp21).
-  programs.zsh.shellAliases.rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
+  # No home-manager on this host, so the desktop's `rebuild`/`cleanup`
+  # aliases don't exist here — define them system-wide. With no #attr,
+  # nixos-rebuild defaults to this host's hostname (dp21).
+  programs.zsh.shellAliases = {
+    rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
+    cleanup = "sudo nix-collect-garbage -d";
+  };
 
   system.stateVersion = "26.05";
 }
