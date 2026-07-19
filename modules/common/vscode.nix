@@ -47,6 +47,7 @@ in
           ms-python.vscode-pylance
           ms-python.debugpy
           ms-python.python
+          ms-vscode-remote.remote-ssh
         ]);
 
       keybindings = [

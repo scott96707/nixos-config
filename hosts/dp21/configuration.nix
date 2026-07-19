@@ -92,6 +92,16 @@
     settings.PasswordAuthentication = false;
   };
 
+  # VS Code Remote-SSH downloads a generic prebuilt server into
+  # ~/.vscode-server on first connect; that binary is linked against the FHS
+  # loader (/lib64/ld-linux-x86-64.so.2), which NixOS doesn't ship. nix-ld
+  # supplies it. Without this the client retries the handshake forever.
+  # Edits land in the ~/projects checkouts, which the manga-aggregator and
+  # media-server units run from directly (see their WorkingDirectory) — so
+  # they take effect on unit restart, not on rebuild. Changes to *those
+  # repos' nix modules* still need a push + `nix flake update` here.
+  programs.nix-ld.enable = true;
+
   # --- USERS ---
   users.users.home = {
     isNormalUser = true;
