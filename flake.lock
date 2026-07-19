@@ -48,11 +48,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784474559,
-        "narHash": "sha256-ult7aJ+zoMhe8HDJAMrQWUL8vXaLPcsti3PnGq/zQ/A=",
+        "lastModified": 1784486304,
+        "narHash": "sha256-mdhcWeobbWJf1dd0+NoMErF5hUeoo37hfUmv/+9Hny4=",
         "ref": "refs/heads/main",
-        "rev": "53e55ad656b55d05fb28de168d142b341db9b60d",
-        "revCount": 22,
+        "rev": "426eadf23df796bfd4fa31206e80bfbca73903ed",
+        "revCount": 23,
         "type": "git",
         "url": "ssh://git@github.com/scott96707/manga-aggregator"
       },
@@ -68,11 +68,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784427908,
-        "narHash": "sha256-ue2ja2BgXFHjzX+CNerZ7DXOV5kTn8JxPIQmGwJVOQ0=",
+        "lastModified": 1784496350,
+        "narHash": "sha256-JHlijJTqimx2MBM6kszbPeNm95jpdlbC0BTGjkLCoyk=",
         "ref": "refs/heads/main",
-        "rev": "71625aad0764ef8ea30bcec7aa2aaf8e95441df5",
-        "revCount": 10,
+        "rev": "6e87e208adc5cdb5b7574580de74c1ac97621402",
+        "revCount": 12,
         "type": "git",
         "url": "ssh://git@github.com/scott96707/media-server"
       },
@@ -124,11 +124,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1784280462,
-        "narHash": "sha256-DtoqIqM7VkR6NxAkcLpMwmi02USwWb3JdmNGLyhthc0=",
+        "lastModified": 1784432872,
+        "narHash": "sha256-n3gKTBIV4ZA5VQpUakffBe3KGu4+mhPoA34rrqS0GkA=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "293d6abedf0478e681a4dfcfcb35b30fc796a32f",
+        "rev": "fd1462031fdee08f65fd0b4c6b64e22239a77870",
         "type": "github"
       },
       "original": {
