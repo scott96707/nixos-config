@@ -28,7 +28,7 @@ in
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
-      core.editor = "nvim";
+      core.editor = "vim";
 
       # --- SSH commit signing (Git "Verified") ---
       gpg.format = "ssh";

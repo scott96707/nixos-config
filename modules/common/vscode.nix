@@ -156,6 +156,30 @@ in
           };
         };
 
+        # ── Remote-SSH ────────────────────────────────────────────────────────
+        # Workspace-scoped extensions run in the extension host ON the remote,
+        # next to the code they analyze, so they must be installed there. This
+        # list is auto-installed into ~/.vscode-server/extensions on connect.
+        #
+        # Caveat to the "fully declarative" claim above: nix does NOT manage
+        # those. mutableExtensionsDir and the nix-built extension set govern
+        # ~/.vscode/extensions on whichever host runs the CLIENT. The remote
+        # copies are fetched from the Marketplace at runtime, live in $HOME,
+        # and survive nix-collect-garbage. Only the list below is declarative.
+        #
+        # Deliberately excluded: jnoortheen.nix-ide, because nix.serverPath /
+        # nix.formatterPath below are absolute MacBook store paths that do not
+        # exist on dp21 (nixd is not installed there at all).
+        "remote.SSH.defaultExtensions" = [
+          "ms-python.python"
+          "ms-python.vscode-pylance"
+          "ms-python.debugpy"
+          "ms-python.vscode-python-envs"
+          "anthropic.claude-code"
+          "redhat.vscode-yaml" # compose files in media-server
+          "ms-azuretools.vscode-docker" # podman stack on dp21
+        ];
+
         # ── Telemetry ─────────────────────────────────────────────────────────
         "redhat.telemetry.enabled" = false;
 
@@ -174,9 +198,15 @@ in
         # Use zsh as the default terminal profile.
         "terminal.integrated.defaultProfile.linux" = "zsh";
         # Define the zsh profile path and login args.
+        # Resolved via PATH rather than an absolute ${pkgs.zsh} store path on
+        # purpose. This key is only consulted when the terminal's platform is
+        # Linux — which on the MacBook means exclusively inside a Remote-SSH
+        # window, where a Darwin store path does not exist and the terminal
+        # would fail to open. Both Linux hosts set programs.zsh.enable, so the
+        # bare name resolves locally and remotely.
         "terminal.integrated.profiles.linux" = {
           "zsh" = {
-            "path" = "${pkgs.zsh}/bin/zsh";
+            "path" = "zsh";
             "args" = [ "-l" ];
           };
         };

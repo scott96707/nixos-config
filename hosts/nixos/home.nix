@@ -18,7 +18,11 @@
   ];
 
   home.sessionVariables = {
-    VISUAL = "nvim";
+    # `vim` is neovim here via vimAlias in modules/common/neovim.nix. Set
+    # explicitly because that module's defaultEditor is off — see the comment
+    # there for why.
+    EDITOR = "vim";
+    VISUAL = "vim";
     BROWSER = "firefox";
     SOPS_AGE_KEY_FILE = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
     MOZ_ENABLE_WAYLAND = "1";

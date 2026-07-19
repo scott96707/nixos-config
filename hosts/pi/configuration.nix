@@ -137,10 +137,28 @@ in
   # it makes an in-place `git commit` on nixos-config work rather than fail.
   programs.git = {
     enable = true;
-    config.user = {
-      name = gitIdentity.name;
-      email = gitIdentity.email;
+    config = {
+      user = {
+        name = gitIdentity.name;
+        email = gitIdentity.email;
+        # Same per-host scheme as dp21. NOTE: unlike dp21, this box has no
+        # ~/.ssh/id_ed25519 yet — generate one and register its public half on
+        # GitHub as Authentication + Signing, or commits here will abort with
+        # "unable to start editor"/key-not-found rather than fall back.
+        signingkey = "~/.ssh/id_ed25519.pub";
+      };
+      gpg.format = "ssh";
+      commit.gpgsign = true;
+      core.editor = "vim";
     };
+  };
+
+  # --- DEFAULT EDITOR ---
+  # Same as dp21: no home-manager, so EDITOR was unset and tools fell back to
+  # nano. Real vim here, not the neovim alias the workstations get.
+  environment.variables = {
+    EDITOR = "vim";
+    VISUAL = "vim";
   };
 
   # --- SECRETS (sops-nix) ---

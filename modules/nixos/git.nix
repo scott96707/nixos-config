@@ -28,7 +28,7 @@ in
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
-      core.editor = "nvim";
+      core.editor = "vim";
 
       # Tell Git to use SSH for signing
       gpg.format = "ssh";

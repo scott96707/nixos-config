@@ -3,7 +3,13 @@
 {
   programs.neovim = {
     enable = true;
-    defaultEditor = true;
+    # Deliberately false: this option sets EDITOR/VISUAL to "nvim", which
+    # collides with the explicit EDITOR = "vim" in the host home.nix files
+    # (a hard eval error, not a silent override). vimAlias below means `vim`
+    # resolves to this neovim anyway, so nothing is lost — and every host,
+    # including the home-manager-less appliances, now names the editor the
+    # same way.
+    defaultEditor = false;
     viAlias = true;
     vimAlias = true;
     withRuby = true;

@@ -33,9 +33,13 @@
     home.stateVersion = "24.11";
 
     # macOS Specific session variables
+    # "vim" not "nvim": modules/common/neovim.nix sets vimAlias, so `vim` IS
+    # neovim here — same binary, same config. Using the vim name uniformly
+    # means the appliances (real vim, no neovim) and the workstations share
+    # one editor setting.
     home.sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
+      EDITOR = "vim";
+      VISUAL = "vim";
     };
 
     # macOS Specific Aliases

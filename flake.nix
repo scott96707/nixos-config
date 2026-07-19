@@ -62,7 +62,6 @@
       formatter = {
         x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
         x86_64-darwin = nixpkgs.legacyPackages.x86_64-darwin.nixfmt-tree;
-        aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-tree;
       };
 
       # --- 1. LINUX PC (NixOS) ---
@@ -117,7 +116,7 @@
         ];
       };
 
-      # --- 2a. MACBOOK (Intel) ---
+      # --- 2. MACBOOK (Intel) ---
       darwinConfigurations."macbook-intel" = nix-darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         specialArgs = { inherit inputs; };
@@ -130,25 +129,6 @@
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "hm-backup";
             home-manager.users.work_machine = import ./hosts/macbook/home.nix;
-          }
-          sops-nix.darwinModules.sops
-        ];
-      };
-
-      # --- 2b. MACBOOK (Apple Silicon / ARM) ---
-      darwinConfigurations."macbook-arm" = nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./hosts/macbook-arm/configuration.nix
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "hm-backup";
-            home-manager.users.${(import ./hosts/macbook-arm/local.nix).username} =
-              import ./hosts/macbook-arm/home.nix;
           }
           sops-nix.darwinModules.sops
         ];

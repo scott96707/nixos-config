@@ -134,10 +134,29 @@ in
   # hostname.
   programs.git = {
     enable = true;
-    config.user = {
-      name = gitIdentity.name;
-      email = gitIdentity.email;
+    config = {
+      user = {
+        name = gitIdentity.name;
+        email = gitIdentity.email;
+        # Per-host key: this box has its own ~/.ssh/id_ed25519, and its public
+        # half is registered on GitHub as BOTH an Authentication and a Signing
+        # key. Auth-only registration signs fine but never shows Verified.
+        # Tilde (not /home/home) so a shared /etc/gitconfig resolves per-user.
+        signingkey = "~/.ssh/id_ed25519.pub";
+      };
+      gpg.format = "ssh";
+      commit.gpgsign = true;
+      core.editor = "vim";
     };
+  };
+
+  # --- DEFAULT EDITOR ---
+  # No home-manager here, so nothing was setting EDITOR at all: `systemctl
+  # edit`, `visudo` and friends fell back to nano. Real vim on this host, not
+  # the neovim that `vim` aliases to on the workstations.
+  environment.variables = {
+    EDITOR = "vim";
+    VISUAL = "vim";
   };
 
   programs.zsh.enable = true;
