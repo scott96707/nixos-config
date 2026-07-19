@@ -168,5 +168,20 @@ in
     cleanup = "sudo nix-collect-garbage -d";
   };
 
+  # The compose stack runs under the ROOTFUL podman service, but the podman
+  # CLI defaults to rootless for a normal user — so `podman ps` in ~/projects/
+  # media-server silently lists nothing instead of erroring. CONTAINER_HOST
+  # points it at the rootful socket (the media-server module already puts this
+  # user in the `podman` group, so no sudo needed).
+  #
+  # Deliberately NOT set globally: that would hijack every podman invocation
+  # on the host. direnv scopes it to the media-server checkout via its .envrc,
+  # leaving rootless podman the default everywhere else.
+  programs.direnv.enable = true;
+  # Whitelist the checkout so its .envrc loads without a manual `direnv allow`.
+  # direnv's trust prompt guards against a hostile .envrc arriving via a repo
+  # you cloned; this one is our own config, on a host only we log into.
+  programs.direnv.settings.whitelist.prefix = [ "/home/home/projects/media-server" ];
+
   system.stateVersion = "26.05";
 }
