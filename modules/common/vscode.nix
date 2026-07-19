@@ -18,15 +18,11 @@ in
       extensions =
         with pkgs.vscode-extensions;
         [
-          jnoortheen.nix-ide
           ms-azuretools.vscode-docker
           ms-toolsai.jupyter
           davidanson.vscode-markdownlint
           github.vscode-github-actions
           hashicorp.terraform
-          ms-python.debugpy
-          ms-python.python
-          ms-python.vscode-pylance
           oderwat.indent-rainbow
           pkief.material-icon-theme
           redhat.vscode-yaml
@@ -38,6 +34,7 @@ in
         # Marketplace directly, so these stay current via `nix flake update`
         # with no manual version/sha256 pins to maintain.
         ++ (with pkgs.vscode-marketplace; [
+          jnoortheen.nix-ide
           janisdd.vscode-edit-csv
           anthropic.claude-code
           tomoki1207.pdf
@@ -47,6 +44,9 @@ in
           dnut.rewrap-revived
           janne252.fontawesome-autocomplete
           ms-python.vscode-python-envs
+          ms-python.vscode-pylance
+          ms-python.debugpy
+          ms-python.python
         ]);
 
       keybindings = [
