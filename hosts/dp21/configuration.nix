@@ -93,6 +93,9 @@
       # NixOS desktop's key (~/.ssh/id_ed25519.pub) — the machine rebuilds
       # are pushed from.
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILYmkZ6qbZ6ACFeQRm2Pts2ofM/Zk42GUu1bYOcPkmDo scott96707@gmail.com"
+      # MacBook's key (~/.ssh/id_ed25519.pub) — day-to-day admin from the
+      # laptop.
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFxSOei5KWJCu5Fp0C0k1JT+KdwTCXIVDYxQif88/UFL scott96707@gmail.com"
     ];
   };
 
