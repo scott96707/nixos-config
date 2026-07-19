@@ -68,11 +68,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784496350,
-        "narHash": "sha256-JHlijJTqimx2MBM6kszbPeNm95jpdlbC0BTGjkLCoyk=",
+        "lastModified": 1784505323,
+        "narHash": "sha256-L5bsrP0cvG/KIkqrRv2761thQFSzxN+Sn9Ijev8hh8s=",
         "ref": "refs/heads/main",
-        "rev": "6e87e208adc5cdb5b7574580de74c1ac97621402",
-        "revCount": 12,
+        "rev": "852b0a6fa2cf4223a390197d968eb4510a2fc621",
+        "revCount": 14,
         "type": "git",
         "url": "ssh://git@github.com/scott96707/media-server"
       },
