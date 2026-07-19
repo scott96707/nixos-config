@@ -99,6 +99,11 @@
     ];
   };
 
+  # --- HOST SPECIFIC PACKAGES ---
+  environment.systemPackages = with pkgs; [
+    vim
+  ];
+
   programs.zsh.enable = true;
   # No home-manager on this host, so the desktop's `rebuild`/`cleanup`
   # aliases don't exist here — define them system-wide. With no #attr,

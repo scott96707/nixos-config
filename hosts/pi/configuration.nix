@@ -125,6 +125,7 @@
   environment.systemPackages = with pkgs; [
     age
     sops
+    vim
   ];
 
   # --- SECRETS (sops-nix) ---
