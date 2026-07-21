@@ -120,7 +120,7 @@ in
   # aliases don't exist here — define them system-wide. With no #attr,
   # nixos-rebuild defaults to this host's hostname (pi).
   programs.zsh.shellAliases = {
-    rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
+    rebuild = "nixos-rebuild switch --flake ~/nixos-config --sudo";
     cleanup = "sudo nix-collect-garbage -d";
   };
 
