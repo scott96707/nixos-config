@@ -112,6 +112,9 @@ in
       # NixOS desktop's key (~/.ssh/id_ed25519.pub) — the machine rebuilds
       # are pushed from.
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILYmkZ6qbZ6ACFeQRm2Pts2ofM/Zk42GUu1bYOcPkmDo scott96707@gmail.com"
+      # MacBook's key (~/.ssh/id_ed25519.pub) — day-to-day admin from the
+      # laptop.
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFxSOei5KWJCu5Fp0C0k1JT+KdwTCXIVDYxQif88/UFL scott96707@gmail.com"
     ];
   };
 
@@ -123,6 +126,26 @@ in
     rebuild = "nixos-rebuild switch --flake ~/nixos-config --sudo";
     cleanup = "sudo nix-collect-garbage -d";
   };
+
+  # --- NIX (remote deploys from the desktop) ---
+  # `nixos-rebuild --flake …#pi --target-host home@<pi>` builds the closure on
+  # the desktop and copies it here. The Pi's daemon refuses incoming store
+  # paths that aren't signed by a key it trusts — unless the pushing user is
+  # trusted — so the copy fails with "lacks a signature by a trusted key".
+  # `home` is already a wheel/sudo user (root-equivalent on this box), so
+  # trusting it for Nix grants nothing it couldn't already do.
+  nix.settings.trusted-users = [ "root" "home" ];
+
+  # This box's kernel can't provide the namespaces Nix's build sandbox needs
+  # ("this system does not support the kernel namespaces that are required for
+  # sandboxing"), nor load the seccomp BPF filter Nix applies to builds
+  # ("unable to load seccomp BPF program") — both are restricted on this
+  # kernel. So local on-Pi builds — the `rebuild` alias, or any deploy that
+  # isn't a prebuilt closure pushed from the desktop — fail unless both are
+  # off. Desktop `--target-host` pushes are unaffected (they build on the
+  # desktop and only copy the result here).
+  nix.settings.sandbox = false;
+  nix.settings.filter-syscalls = false;
 
   # --- HOST SPECIFIC PACKAGES ---
   environment.systemPackages = with pkgs; [

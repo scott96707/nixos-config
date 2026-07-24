@@ -55,6 +55,17 @@
       nix-vscode-extensions,
       ...
     }:
+    let
+      # Module list shared by the deployed Pi system and its SD-image build,
+      # so the two can't drift. images.pi layers the sd-image-aarch64 module
+      # on top of this to add the bootable-image machinery; the deployed
+      # system itself doesn't need it.
+      piModules = [
+        ./hosts/pi/configuration.nix
+        inputs.homelab-network.nixosModules.homelab-network
+        sops-nix.nixosModules.sops
+      ];
+    in
     {
       # `nix fmt` formats the whole repo with the same nixfmt already
       # configured as the editor formatter (nixfmt-tree wraps nixfmt in
@@ -109,12 +120,23 @@
       nixosConfigurations.pi = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
         specialArgs = { inherit inputs; };
-        modules = [
-          ./hosts/pi/configuration.nix
-          inputs.homelab-network.nixosModules.homelab-network
-          sops-nix.nixosModules.sops
-        ];
+        modules = piModules;
       };
+
+      # Bootable, headless SD image built FROM the pi config above — SSH and
+      # your authorized key are already baked in, so first boot needs no
+      # monitor or keyboard: plug in Ethernet, find the Pi's DHCP lease, then
+      # `ssh home@<pi-ip>`. Build with `nix build .#images.pi` (requires the
+      # aarch64 emulation enabled in hosts/nixos/configuration.nix). Output
+      # lands at ./result/sd-image/*.img.zst.
+      images.pi =
+        (nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = { inherit inputs; };
+          modules = piModules ++ [
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+          ];
+        }).config.system.build.sdImage;
 
       # --- 2. MACBOOK (Intel) ---
       darwinConfigurations."macbook-intel" = nix-darwin.lib.darwinSystem {

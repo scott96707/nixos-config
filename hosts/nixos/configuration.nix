@@ -32,6 +32,14 @@
     "amdgpu.dc=1"
   ];
 
+  # Run aarch64 binaries under QEMU so this x86_64 box can build the Pi's
+  # closure and its bootable SD image (`nix build .#images.pi`). Without this
+  # there's no aarch64 builder anywhere, so the headless-image bring-up in
+  # ~/projects/homelab-network can't produce an image. Emulated builds are
+  # slow, but most of the aarch64 closure is substituted from cache.nixos.org
+  # rather than compiled.
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   # --- HARDWARE & GPU ---
   hardware.graphics = {
     enable = true;
