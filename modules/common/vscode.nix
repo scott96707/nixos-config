@@ -3,6 +3,48 @@
 let
   # The custom keybindings need cmd on macOS and ctrl on Linux.
   mod = if pkgs.stdenv.isDarwin then "cmd" else "ctrl";
+
+  # ── TEMPORARY OVERRIDE (remove once the snapshot catches up) ────────────
+  # nix-vscode-extensions is a snapshot: pkgs.vscode-marketplace only carries
+  # whatever version its scraper last committed upstream. As of 2026-07-25 the
+  # locked input (rev 242a696) ships claude-code 2.1.217, but the Marketplace
+  # is already at 2.1.220. This pins that newer build by hand — the manual
+  # version/hash pin the "no manual pins" comment below otherwise avoids.
+  #
+  # claude-code is a PLATFORM-SPECIFIC extension: it bundles a ~260 MB native
+  # `claude` binary plus a per-OS audio-capture.node, so each system needs its
+  # own Marketplace targetPlatform + hash. Pick the wrong one and VS Code
+  # still installs — e.g. the Windows build on Linux — but the extension can't
+  # launch its binary, so Claude Code's menus/inputs never render. This was
+  # the failure mode of the first attempt at this pin. `mktplcRef.arch`
+  # appends `?targetPlatform=` to the download and forces a `.vsix` filename
+  # so the unpacker accepts it. Refresh a hash for a new version with:
+  #   nix-prefetch-url 'https://anthropic.gallery.vsassets.io/_apis/public/gallery/publisher/anthropic/extension/claude-code/<ver>/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?targetPlatform=<arch>'
+  #
+  # To retire this: run `nix flake update`, confirm the snapshot version
+  #   nix eval --impure --expr 'let f=builtins.getFlake (toString ./.); p=import f.inputs.nixpkgs { system=builtins.currentSystem; overlays=[f.inputs.nix-vscode-extensions.overlays.default]; }; in p.vscode-marketplace.anthropic.claude-code.version'
+  # is >= 2.1.220, then delete this binding and swap `claude-code-pinned`
+  # back to `anthropic.claude-code` in the extensions list.
+  claude-code-pin =
+    {
+      x86_64-linux = {
+        arch = "linux-x64";
+        hash = "sha256-GUuO8kJczyQOV/wIxFd8AJ5Td6kuSqPCxB/pPsbwxi4=";
+      };
+      x86_64-darwin = {
+        arch = "darwin-x64";
+        hash = "sha256-8axg9aGR7e952Ukdcu50n3JUbUP+4HJP3dWByvwa1Ss=";
+      };
+    }
+    .${pkgs.stdenv.hostPlatform.system};
+  claude-code-pinned = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      publisher = "anthropic";
+      name = "claude-code";
+      version = "2.1.220";
+      inherit (claude-code-pin) arch hash;
+    };
+  };
 in
 {
   programs.vscode = {
@@ -36,7 +78,7 @@ in
         ++ (with pkgs.vscode-marketplace; [
           jnoortheen.nix-ide
           janisdd.vscode-edit-csv
-          anthropic.claude-code
+          claude-code-pinned # TEMPORARY: pinned to 2.1.220, see let block above
           tomoki1207.pdf
           ahmadawais.shades-of-purple
           bahramjoharshamshiri.hcl-lsp
