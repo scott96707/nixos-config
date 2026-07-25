@@ -73,7 +73,7 @@ in
       enable = true;
       scrapeTargets = [
         "127.0.0.1:9100" # this host
-        # "<pi-ip>:9100" — uncomment once the Pi has its DHCP reservation
+        "10.0.0.200:9100" # the Pi (DNS/vault/VPN box)
       ];
     };
   };
