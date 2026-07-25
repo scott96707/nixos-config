@@ -85,14 +85,22 @@
   # until dedicated hardware exists.
   services.homelab-network.enable = true;
 
-  # This machine is becoming the LAN's DNS server: the router's DHCP will
-  # hand out this host's own IP as DNS. Pin real upstreams for the host
-  # itself so boot can't deadlock (image pulls need DNS before AdGuard is
-  # up). Verify after rebuild: `cat /etc/resolv.conf` should list these.
+  # Use the Pi (AdGuard) as this LAN's DNS. The XB8 gateway won't let us change
+  # the DHCP-handed-out DNS, so each host points at the Pi directly. Comcast's
+  # resolvers are listed as fallbacks: the glibc resolver only tries them if
+  # 10.0.0.200 stops *responding* (e.g. the Pi is mid-rebuild). A blocked-ad
+  # answer is a valid response, not a failure — so ad-filtering is NOT bypassed
+  # while the Pi is up; the fallback only saves you if the Pi is unreachable.
+  # Verify after rebuild: `cat /etc/resolv.conf`.
   networking.nameservers = [
-    "9.9.9.9"
-    "1.1.1.1"
+    "10.0.0.200" # Pi / AdGuard (primary)
+    "75.75.75.75" # Comcast fallback — only used if the Pi is unreachable
+    "75.75.76.76"
   ];
+  # NetworkManager would otherwise prepend the gateway's DHCP-provided DNS,
+  # making Comcast primary and silently bypassing AdGuard. "none" hands
+  # /etc/resolv.conf management to networking.nameservers above.
+  networking.networkmanager.dns = "none";
 
   # --- STORAGE & MOUNTS ---
   services.fstrim.enable = true;
