@@ -136,16 +136,14 @@ in
   # trusting it for Nix grants nothing it couldn't already do.
   nix.settings.trusted-users = [ "root" "home" ];
 
-  # This box's kernel can't provide the namespaces Nix's build sandbox needs
-  # ("this system does not support the kernel namespaces that are required for
-  # sandboxing"), nor load the seccomp BPF filter Nix applies to builds
-  # ("unable to load seccomp BPF program") — both are restricted on this
-  # kernel. So local on-Pi builds — the `rebuild` alias, or any deploy that
-  # isn't a prebuilt closure pushed from the desktop — fail unless both are
-  # off. Desktop `--target-host` pushes are unaffected (they build on the
-  # desktop and only copy the result here).
-  nix.settings.sandbox = false;
-  nix.settings.filter-syscalls = false;
+  # Passwordless sudo for wheel. Without a declarative password, `home` was
+  # created locked — it could never `sudo`, and with SSH key-only + no console
+  # there was no privileged path onto the box at all (fixed by re-flashing with
+  # this in place). SSH here is key-only, so the security boundary is the
+  # authorized SSH keys, not a sudo password; `home` is the only wheel user.
+  # This also lets `nixos-rebuild --target-host home@<pi> --sudo` from the
+  # desktop activate non-interactively.
+  security.sudo.wheelNeedsPassword = false;
 
   # --- HOST SPECIFIC PACKAGES ---
   environment.systemPackages = with pkgs; [

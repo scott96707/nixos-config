@@ -40,6 +40,15 @@
   # rather than compiled.
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
+  # Building aarch64 under QEMU user-mode emulation can't set up Nix's build
+  # isolation: the emulated process fails to load the seccomp BPF filter
+  # ("unable to load seccomp BPF program: Invalid argument") and can't get the
+  # sandbox namespaces. Turn both off so emulated Pi builds — the SD image and
+  # every `nixos-rebuild --flake …#pi --target-host` push, both of which build
+  # here — succeed. Native x86_64 builds are unaffected in practice.
+  nix.settings.sandbox = false;
+  nix.settings.filter-syscalls = false;
+
   # --- HARDWARE & GPU ---
   hardware.graphics = {
     enable = true;
