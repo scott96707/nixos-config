@@ -202,7 +202,10 @@ in
     defaultSopsFile = ../../secrets/secrets.yaml;
     age.keyFile = "/var/lib/sops-nix/key.txt";
     secrets = {
-      grafana-cloud-token = { };
+      # Prometheus reads this for remote_write basic-auth. sops-nix defaults to
+      # root:root 0400; Prometheus runs as the `prometheus` user, so it must own
+      # the file or the push fails with "permission denied" on the token.
+      grafana-cloud-token.owner = "prometheus";
     };
   };
 
