@@ -102,6 +102,50 @@ in
     settings.PasswordAuthentication = false;
   };
 
+  # Tailscale: reach the whole LAN and get AdGuard DNS from anywhere, with no
+  # port-forwarding on the XB8 (Tailscale does its own NAT traversal). This box
+  # is the subnet router for the LAN. After this rebuild, authenticate once on
+  # the Pi:
+  #   sudo tailscale up --advertise-routes=10.0.0.0/24 --accept-dns=false
+  # (add --advertise-exit-node to also route all client traffic through home).
+  # --accept-dns=false keeps the Pi on its own pinned upstreams. Then in the
+  # admin console (login.tailscale.com): approve the 10.0.0.0/24 route and set
+  # tailnet DNS nameserver to 10.0.0.200 (AdGuard) so every device filters.
+  # useRoutingFeatures = "server" turns on the IP forwarding a subnet router /
+  # exit node needs.
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "server";
+  };
+  # Trust the tailnet interface so subnet-routed peer traffic isn't firewalled.
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
+
+  # Tailscale subnet routing forwards LAN traffic faster with UDP GRO
+  # forwarding enabled on the NIC — this clears the "UDP GRO forwarding is
+  # suboptimally configured" warning from `tailscale up`. Apply the ethtool
+  # tweak Tailscale recommends at boot, auto-detecting the default-route
+  # interface (so it survives an end0 rename). Purely a throughput
+  # optimization; subnet routing works without it.
+  systemd.services.tailscale-udp-gro = {
+    description = "Enable UDP GRO forwarding on the LAN NIC for Tailscale subnet routing";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    path = [
+      pkgs.ethtool
+      pkgs.iproute2
+      pkgs.gnugrep
+      pkgs.gawk
+    ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      dev=$(ip -o route get 8.8.8.8 | grep -oE 'dev [^ ]+' | awk '{print $2}')
+      if [ -n "$dev" ]; then
+        ethtool -K "$dev" rx-udp-gro-forwarding on rx-gro-list off
+      fi
+    '';
+  };
+
   # --- USERS ---
   users.users.home = {
     isNormalUser = true;

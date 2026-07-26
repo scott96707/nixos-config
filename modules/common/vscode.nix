@@ -62,7 +62,7 @@ in
         [
           ms-azuretools.vscode-docker
           ms-toolsai.jupyter
-          davidanson.vscode-markdownlint
+          # davidanson.vscode-markdownlint
           github.vscode-github-actions
           hashicorp.terraform
           oderwat.indent-rainbow
