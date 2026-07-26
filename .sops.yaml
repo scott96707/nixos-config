@@ -2,9 +2,11 @@
 keys:
   - &admin_nixos age150cr56c0pacfvg4zpr736hp0fewh29faj9726e7fhadkaq2fqvhqkaqret
   - &pi age19f4f4jcd4yv3anpgq5xjs3w3wfv6mpkrs0hy4wnz36hrs58e45gqdtu7yj
+  - &dp21 age174fyuv8egtcfeww9n9esylpv7lfrrj39uj3gkeay3rllv42eyg8qywzcf3
 creation_rules:
   - path_regex: secrets/secrets.yaml$
     key_groups:
       - age:
           - *admin_nixos
           - *pi
+          - *dp21

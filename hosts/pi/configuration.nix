@@ -68,15 +68,18 @@ in
     #   ];
     # };
 
-    # Blocked on Backblaze B2 / Cloudflare R2 credentials. To enable: add
-    # restic-password + restic-environment to secrets/secrets.yaml, then
-    # uncomment.
-    # backups = {
-    #   enable = true;
-    #   repository = "s3:<endpoint>/<bucket>";
-    #   passwordFile = config.sops.secrets.restic-password.path;
-    #   environmentFile = config.sops.secrets.restic-environment.path;
-    # };
+    # Restic → Backblaze B2 (S3-compatible), bucket home-vaultwarden-backup in
+    # the us-west-004 region. Client-side encrypted with restic-password; the
+    # B2 keyID/appKey live in restic-environment (AWS_ACCESS_KEY_ID /
+    # AWS_SECRET_ACCESS_KEY). Both come from sops (see secrets block below).
+    # Plain private bucket — no Object Lock (it breaks `restic forget --prune`)
+    # and no server-side encryption (restic already encrypts client-side).
+    backups = {
+      enable = true;
+      repository = "s3:s3.us-west-004.backblazeb2.com/home-vaultwarden-backup";
+      passwordFile = config.sops.secrets.restic-password.path;
+      environmentFile = config.sops.secrets.restic-environment.path;
+    };
   };
 
   # This machine is the LAN's DNS server: the router's DHCP hands out this
@@ -235,12 +238,12 @@ in
     age.keyFile = "/var/lib/sops-nix/key.txt";
 
     # Uncomment as the corresponding entries are added to secrets.yaml:
-    # secrets = {
-    #   vaultwarden-env = { };
-    #   wireguard-private-key = { };
-    #   restic-password = { };
-    #   restic-environment = { };
-    # };
+    secrets = {
+      # vaultwarden-env = { };
+      # wireguard-private-key = { };
+      restic-password = { };
+      restic-environment = { };
+    };
   };
 
   system.stateVersion = "26.05";

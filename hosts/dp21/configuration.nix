@@ -75,6 +75,16 @@ in
         "127.0.0.1:9100" # this host
         "10.0.0.200:9100" # the Pi (DNS/vault/VPN box)
       ];
+      # Stream metrics to Grafana Cloud's free tier so dashboards survive a
+      # dp21 reboot and are reachable off-LAN. url + username (Grafana calls
+      # this the "instance ID") aren't secret; the token is, so it comes from
+      # sops (grafana-cloud-token, defined in the sops block below).
+      remoteWrite = {
+        enable = true;
+        url = "https://prometheus-prod-67-prod-us-west-0.grafana.net/api/prom/push";
+        username = "3400720";
+        passwordFile = config.sops.secrets.grafana-cloud-token.path;
+      };
     };
   };
 
@@ -182,6 +192,19 @@ in
   # direnv's trust prompt guards against a hostile .envrc arriving via a repo
   # you cloned; this one is our own config, on a host only we log into.
   programs.direnv.settings.whitelist.prefix = [ "/home/home/projects/media-server" ];
+
+  # --- SECRETS (sops-nix) ---
+  # dp21 decrypts with its own age key at /var/lib/sops-nix/key.txt (generated
+  # on this box; its PUBLIC half is in .sops.yaml and secrets.yaml was re-keyed
+  # to it via `sops updatekeys`). grafana-cloud-token is the only secret this
+  # host consumes so far — the Prometheus remote_write API token.
+  sops = {
+    defaultSopsFile = ../../secrets/secrets.yaml;
+    age.keyFile = "/var/lib/sops-nix/key.txt";
+    secrets = {
+      grafana-cloud-token = { };
+    };
+  };
 
   system.stateVersion = "26.05";
 }
