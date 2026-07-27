@@ -98,6 +98,28 @@ in
   services.fstrim.enable = true;
   zramSwap.enable = true;
 
+  # 2TB USB external drive "Mule" (NTFS, from a Windows box). Mounted
+  # read-write via the in-kernel ntfs3 driver, non-destructively — existing
+  # data is preserved. uid/gid map every file to `home` (1000:100); dmask/fmask
+  # give dirs 755 and files 644 so the contents are world-readable (e.g. for
+  # Jellyfin later). nofail + a short device timeout mean a disconnected drive
+  # can't wedge boot. If Windows left it "hibernated"/unclean it may mount
+  # read-only until `ntfsfix /dev/sda1` is run.
+  boot.supportedFilesystems = [ "ntfs" ];
+  fileSystems."/mnt/mule" = {
+    device = "/dev/disk/by-uuid/F81EE57C1EE533F2";
+    fsType = "ntfs3";
+    options = [
+      "rw"
+      "uid=1000"
+      "gid=100"
+      "dmask=022"
+      "fmask=133"
+      "nofail"
+      "x-systemd.device-timeout=5s"
+    ];
+  };
+
   # --- REMOTE ACCESS ---
   # Headless box: SSH is the only way in after first boot.
   services.openssh = {
