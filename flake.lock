@@ -48,11 +48,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784984635,
-        "narHash": "sha256-DoVHXOdnIkNMJ3dhxpjPydpZ7xozz0Cu53FdeYtCijM=",
+        "lastModified": 1785416582,
+        "narHash": "sha256-ISG5y5XHJW4bZyQYIMV1QYA+GdFTHr1E8cUOmuEXYi4=",
         "ref": "refs/heads/main",
-        "rev": "05fa133b661958f71469c7fb06821ca5268b424e",
-        "revCount": 29,
+        "rev": "df1bfcf34cc5f3f8202c0070c9033f5ee1c46606",
+        "revCount": 33,
         "type": "git",
         "url": "ssh://git@github.com/scott96707/manga-aggregator"
       },
