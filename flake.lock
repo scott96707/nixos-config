@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784350909,
-        "narHash": "sha256-ZWyzLbS1yKUTeFJLmdVuWNnHttL333/ldJbEE+KzCrM=",
+        "lastModified": 1785119570,
+        "narHash": "sha256-Rgs2xKnGLFWQscxUaXX07oyZeuMDOHEbqDOsgliLFGM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "4ce190229c73d44536caa7072f6308fb2d8feeb3",
+        "rev": "d4fd24667c8cbef124bb70a20380cab75ec8474d",
         "type": "github"
       },
       "original": {
@@ -28,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784073736,
-        "narHash": "sha256-rRK6kEOV/pcONeOht22Suye6o09BbEWM1HCUPPWnYpU=",
+        "lastModified": 1785019697,
+        "narHash": "sha256-It4KkyC2f7e3s/4XXXtrieyHYAUi7EZTMCqwdfs2Skc=",
         "ref": "refs/heads/main",
-        "rev": "3889105859010df13f157b9a4f1fcc42237f40e6",
-        "revCount": 6,
+        "rev": "0e2b77a3470131a0bcb9d6063d04f78a8f00104a",
+        "revCount": 8,
         "type": "git",
         "url": "ssh://git@github.com/scott96707/homelab-network"
       },
@@ -48,11 +48,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785416582,
-        "narHash": "sha256-ISG5y5XHJW4bZyQYIMV1QYA+GdFTHr1E8cUOmuEXYi4=",
+        "lastModified": 1785420431,
+        "narHash": "sha256-pnnHKnxMviPT3jNtq3wzgKUmashhd9L3A6HvSGF9e8Y=",
         "ref": "refs/heads/main",
-        "rev": "df1bfcf34cc5f3f8202c0070c9033f5ee1c46606",
-        "revCount": 33,
+        "rev": "b3bfb84fa5ad21dfed0ff9a18f666e6379789835",
+        "revCount": 34,
         "type": "git",
         "url": "ssh://git@github.com/scott96707/manga-aggregator"
       },
@@ -109,11 +109,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784949765,
-        "narHash": "sha256-MB+0noLfsYMoMsBkyG5CKYZmSk7dSXendvvjfQFUiPw=",
+        "lastModified": 1785379933,
+        "narHash": "sha256-pGF24+SRXpA15zZHcW2r8Tpoljb2AEMi/dMkg8AMn5g=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "242a696abba55b45d577b5292e90b597284f5f85",
+        "rev": "81b6d2803d8f04a4084c3e0eca988e2b573e52ee",
         "type": "github"
       },
       "original": {
@@ -124,11 +124,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1784856561,
-        "narHash": "sha256-J+Bx1Z6Oeoj2FgnBhRMKyUhhtDoOpTgXYaVLZpDjW4A=",
+        "lastModified": 1785386831,
+        "narHash": "sha256-sPS3CaXH8RAT3FZRuy4VcV47iuYIWMMfa0GbyJKC3o4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "597283ad8aa0b331c788e97c4c262d58877074ef",
+        "rev": "21ea275a7c46aef9d4d6ddc962e6d562e9d94183",
         "type": "github"
       },
       "original": {
