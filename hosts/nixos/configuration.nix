@@ -78,12 +78,14 @@
   # after a rebuild the drive stops auto-mounting (mount manually with
   # `mount -t ntfs3 /dev/disk/by-uuid/FEE8A53BE8A4F2D7 …` if needed).
 
-  # --- HOMELAB NETWORK (DNS + reverse proxy) ---
-  # Module comes from the homelab-network flake input
-  # (~/projects/homelab-network); it manages podman, firewall ports
-  # (53/80/443/3000) and autostart. Interim home for AdGuard Home + Caddy
-  # until dedicated hardware exists.
-  services.homelab-network.enable = true;
+  # --- HOMELAB NETWORK: moved to the Pi (hosts/pi) ---
+  # This host doesn't run AdGuard/Caddy anymore — that was the interim,
+  # single-box Phase 1 setup (see homelab-network's README, "Running
+  # everything on one box"). The Pi has run the real deployment for a while
+  # now; this stayed `enable = true` after the migration and was quietly
+  # running a second, unused AdGuard + Caddy in parallel (found 2026-08-01 —
+  # bound to *:53/*:80/*:3000 here, receiving no real traffic since
+  # `networking.nameservers` below already points this LAN at the Pi).
 
   # Use the Pi (AdGuard) as this LAN's DNS. The XB8 gateway won't let us change
   # the DHCP-handed-out DNS, so each host points at the Pi directly. Comcast's
