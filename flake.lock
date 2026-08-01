@@ -28,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785019697,
-        "narHash": "sha256-It4KkyC2f7e3s/4XXXtrieyHYAUi7EZTMCqwdfs2Skc=",
+        "lastModified": 1785602020,
+        "narHash": "sha256-LH40f+EBMRNN+2CWKEdp/2/Q5wD32uVgj33mRt9ArGg=",
         "ref": "refs/heads/main",
-        "rev": "0e2b77a3470131a0bcb9d6063d04f78a8f00104a",
-        "revCount": 8,
+        "rev": "a05cb6c74cb318f4708941aca00c12133bdbe500",
+        "revCount": 9,
         "type": "git",
         "url": "ssh://git@github.com/scott96707/homelab-network"
       },
@@ -48,11 +48,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785539735,
-        "narHash": "sha256-3tkL3potUxJSMD/Mf17B/DUT+mxzPOMaGFy5LbE2xNc=",
+        "lastModified": 1785601057,
+        "narHash": "sha256-pV56TkVkyi2Lni+NCHsc7o+sgstcQC3vsczw2QNIIag=",
         "ref": "refs/heads/main",
-        "rev": "dad11404f483ae0a7b27d4e6576f36485f261a3e",
-        "revCount": 37,
+        "rev": "cca99b0270127826ceec8016a85f891b1e5f1ac9",
+        "revCount": 39,
         "type": "git",
         "url": "ssh://git@github.com/scott96707/manga-aggregator"
       },
