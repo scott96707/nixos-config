@@ -48,12 +48,9 @@ in
       enable = true;
       # environmentFile = config.sops.secrets.vaultwarden-env.path;
 
-      # TEMPORARY bootstrap: no accounts exist yet and there's no admin
-      # token to invite one via the admin panel, so open signups for one
-      # rebuild. Register the account at https://pi.tail48ac56.ts.net, then
-      # set this back to `false` (the default) and rebuild again — don't
-      # leave it on, or anyone who joins the tailnet can register too.
-      signupsAllowed = true;
+      # signupsAllowed left at its default (false): the bootstrap account is
+      # created, so self-service registration is closed again — otherwise
+      # anyone who joins the tailnet could register their own account.
 
       # Bitwarden's browser extension and phone apps need a real cert before
       # they'll log in, and .home.lan can never have one. Tailscale issues a

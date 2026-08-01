@@ -154,6 +154,17 @@
     cores = 0;
   };
 
+  # --- TAILSCALE ---
+  # Ordinary tailnet client — not a subnet router or exit node (that's the
+  # Pi's job; see ~/projects/homelab-network and hosts/pi/configuration.nix).
+  # Needed to reach anything served only on the tailnet, e.g. Vaultwarden at
+  # https://pi.tail48ac56.ts.net (`tailscale serve` binds the tailscale0
+  # interface only, so the LAN IP doesn't reach it — being on the same LAN
+  # isn't enough). After the rebuild, authenticate once:
+  #   sudo tailscale up
+  # (opens a browser link to approve the device in the tailnet).
+  services.tailscale.enable = true;
+
   # --- DESKTOP ENVIRONMENT ---
   services.xserver.enable = true;
   services.displayManager.gdm.enable = true;
