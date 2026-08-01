@@ -47,6 +47,18 @@ in
     vaultwarden = {
       enable = true;
       # environmentFile = config.sops.secrets.vaultwarden-env.path;
+
+      # Bitwarden's browser extension and phone apps need a real cert before
+      # they'll log in, and .home.lan can never have one. Tailscale issues a
+      # Let's Encrypt cert for this node's own MagicDNS name for free, so the
+      # vault gets HTTPS without buying a domain or opening a port — at the
+      # cost of only being reachable from the tailnet. The wider .home.lan
+      # stack still waits on Phase 3 for certs; this covers the one host that
+      # can't work without them.
+      tailscaleServe = {
+        enable = true;
+        hostname = "pi.tail48ac56.ts.net";
+      };
     };
 
     # Scrape target only; the Prometheus server lives on the mini PC.
