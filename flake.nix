@@ -16,7 +16,11 @@
     };
 
     nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
+      # Pinned to the last revision before upstream dropped x86_64-darwin
+      # (commit 435c758, 2026-07-22). This MacBook is an Intel Mac, so newer
+      # revisions crash the overlay with `attribute 'x86_64-darwin' missing`.
+      # Unpin once this host moves off x86_64-darwin (EOL: nixpkgs 26.05).
+      url = "github:nix-community/nix-vscode-extensions/1c7bb95446387973178363916a51b14515fa5ee4";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

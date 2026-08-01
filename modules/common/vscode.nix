@@ -36,7 +36,7 @@ in
         ++ (with pkgs.vscode-marketplace; [
           jnoortheen.nix-ide
           janisdd.vscode-edit-csv
-          "anthropic.claude-code"
+          anthropic.claude-code
           tomoki1207.pdf
           ahmadawais.shades-of-purple
           bahramjoharshamshiri.hcl-lsp
