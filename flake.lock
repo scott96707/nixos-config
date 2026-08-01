@@ -28,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785602020,
-        "narHash": "sha256-LH40f+EBMRNN+2CWKEdp/2/Q5wD32uVgj33mRt9ArGg=",
+        "lastModified": 1785604622,
+        "narHash": "sha256-vPpyJIVlmGjsUy5odcoBgBW29p4ko+hY7xdMMoc6e4c=",
         "ref": "refs/heads/main",
-        "rev": "a05cb6c74cb318f4708941aca00c12133bdbe500",
-        "revCount": 9,
+        "rev": "cb905e0ac5b53808eae7844ade7154e73c66ee1c",
+        "revCount": 10,
         "type": "git",
         "url": "ssh://git@github.com/scott96707/homelab-network"
       },
