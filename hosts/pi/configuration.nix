@@ -64,22 +64,6 @@ in
     # Scrape target only; the Prometheus server lives on the mini PC.
     monitoring.nodeExporter.enable = true;
 
-    # Blocked on secrets that don't exist yet. To enable: `wg genkey` →
-    # wireguard-private-key in secrets/secrets.yaml, `wg pubkey` on each
-    # device for the peer list, then uncomment and forward UDP 51820 to
-    # this host on the gateway.
-    # wireguard = {
-    #   enable = true;
-    #   privateKeyFile = config.sops.secrets.wireguard-private-key.path;
-    #   peers = [
-    #     {
-    #       name = "phone";
-    #       publicKey = "<pubkey>";
-    #       allowedIPs = [ "10.100.0.2/32" ];
-    #     }
-    #   ];
-    # };
-
     # Restic → Backblaze B2 (S3-compatible), bucket home-vaultwarden-backup in
     # the us-west-004 region. Client-side encrypted with restic-password; the
     # B2 keyID/appKey live in restic-environment (AWS_ACCESS_KEY_ID /
@@ -252,7 +236,6 @@ in
     # Uncomment as the corresponding entries are added to secrets.yaml:
     secrets = {
       # vaultwarden-env = { };
-      # wireguard-private-key = { };
       restic-password = { };
       restic-environment = { };
     };
