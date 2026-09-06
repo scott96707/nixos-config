@@ -44,9 +44,13 @@ in
   # desktop→M3 migration: that repo's README.
   services.media-server = {
     enable = true;
-    # dataDriveUuid stays at its null default: media lives on the internal
-    # SSD (DATA_ROOT in .env points there). When the SSD fills, the old HDD
-    # goes into a USB enclosure and its UUID goes here.
+    # The SSD filled (2026-09-06), so media moved to the reformatted 2TB
+    # "Mule" (ext4) mounted at /mnt/mule; .env's DATA_ROOT points there.
+    # mountPoint makes the stack's RequiresMountsFor wait on that mount before
+    # containers start. dataDriveUuid stays null on purpose: the ext4 mount is
+    # declared directly under STORAGE below, since the module's own mount
+    # management assumes NTFS (fsType/uid/gid mount options).
+    mountPoint = "/mnt/mule";
     composeFiles = [
       "docker-compose.yml"
       "docker-compose.gpu.yml" # Intel QSV transcoding
@@ -98,23 +102,18 @@ in
   services.fstrim.enable = true;
   zramSwap.enable = true;
 
-  # 2TB USB external drive "Mule" (NTFS, from a Windows box). Mounted
-  # read-write via the in-kernel ntfs3 driver, non-destructively — existing
-  # data is preserved. uid/gid map every file to `home` (1000:100); dmask/fmask
-  # give dirs 755 and files 644 so the contents are world-readable (e.g. for
-  # Jellyfin later). nofail + a short device timeout mean a disconnected drive
-  # can't wedge boot. If Windows left it "hibernated"/unclean it may mount
-  # read-only until `ntfsfix /dev/sda1` is run.
-  boot.supportedFilesystems = [ "ntfs" ];
+  # 2TB external drive "Mule", reformatted from NTFS to ext4 (2026-09-06) to
+  # hold the media-server data tree (torrents + hardlinked media + usenet)
+  # once the internal SSD filled. ext4 gives native ownership and reliable
+  # cross-tool hardlinks, which the Arr atomic-move / instant-import layout
+  # depends on. nofail + a short device timeout mean a disconnected drive
+  # can't wedge boot. DATA_ROOT in the media-server .env points at this mount;
+  # services.media-server.mountPoint (above) gates the stack on it.
   fileSystems."/mnt/mule" = {
-    device = "/dev/disk/by-uuid/F81EE57C1EE533F2";
-    fsType = "ntfs3";
+    device = "/dev/disk/by-uuid/d2b49fa3-11e2-4ed2-a53d-321aac470e34";
+    fsType = "ext4";
     options = [
-      "rw"
-      "uid=1000"
-      "gid=100"
-      "dmask=022"
-      "fmask=133"
+      "defaults"
       "nofail"
       "x-systemd.device-timeout=5s"
     ];
