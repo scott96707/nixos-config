@@ -31,6 +31,90 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
+  # Adds a Memtest86+ entry to the boot menu. Motivated by the 2026-09-16
+  # hard freeze (52 days uptime, then instant silence at 03:32 with zero
+  # logged cause): random total freezes are a classic RAM-fault symptom, and
+  # this box's cause was untraceable after the fact. Boot this before blaming
+  # software if it freezes again — a memory error is the cheapest thing to
+  # rule out. No runtime cost; it's just an extra menu entry.
+  boot.loader.systemd-boot.memtest86.enable = true;
+
+  # --- RELIABILITY & CRASH FORENSICS ---
+  # Background: on 2026-09-16 the box ran fine for 52 days, then froze solid
+  # at 03:32 and sat dead and unreachable for ~3h until a manual power cycle.
+  # Post-mortem found NOTHING: userspace logs stopped mid-line, the kernel had
+  # been silent for days, and there was no OOM / thermal / lockup / panic
+  # trace. Two reasons it was unknowable: (1) a hard freeze can't write its own
+  # cause to disk, and (2) nothing here was configured to capture a panic
+  # across the reboot (pstore empty, kdump not loaded). This block fixes both
+  # the recovery time and the forensics so the NEXT freeze is diagnosable.
+
+  # (1) HARDWARE WATCHDOG — the big recovery win. systemd pets the Intel TCO
+  # watchdog every runtimeTime/2; if the kernel or systemd wedges hard enough
+  # to stop petting it, the chip force-resets the board. That turns a 3-hour
+  # "dead until someone drives over and hits the button" outage into a ~30s
+  # self-recovery. iTCO_wdt is the on-die watchdog on this MSI/Intel platform;
+  # load it explicitly rather than hope it auto-probes. Verify after rebuild
+  # with `wdctl` (should show an iTCO device) — if the timeout clamps below
+  # 30s that's fine, systemd adapts.
+  boot.kernelModules = [ "iTCO_wdt" ];
+  systemd.watchdog.runtimeTime = "30s";
+
+  # (2) TURN HANGS INTO CAPTURABLE PANICS. A watchdog reset alone tells us
+  # nothing about *why*. These make the kernel self-panic the instant it
+  # detects a stall — and a panic (unlike a silent freeze) gets a stack trace
+  # written to pstore and, if enabled below, a full kdump. Then panic=30
+  # auto-reboots so we still get the box back without the hardware watchdog
+  # having to fire.
+  #   softlockup_panic: a CPU stuck in the kernel >~20s not scheduling. Real
+  #     lockup, near-zero false positives — safe to panic on.
+  #   hardlockup_panic: a CPU wedged with interrupts disabled (NMI-detected).
+  #     Always a genuine fault. (No-op if this kernel lacks the detector.)
+  #   panic_on_oops: promote an oops to a full panic so it's captured, not
+  #     limped past into an unknown state.
+  #   panic=30: reboot 30s after any panic (brief pause so the trace flushes).
+  # Deliberately NOT enabling kernel.hung_task_panic: a "hung task" is any
+  # process in uninterruptible-D state past the timeout, and the Mule (the
+  # external 2TB at /dev/sda1) stalling on I/O could trip that and put the box
+  # in a reboot loop. Left as detection-only (warnings still log). Revisit if
+  # a future freeze looks I/O-related.
+  boot.kernel.sysctl = {
+    "kernel.softlockup_panic" = 1;
+    "kernel.hardlockup_panic" = 1;
+    "kernel.panic_on_oops" = 1;
+    "kernel.panic" = 30;
+  };
+
+  # (3) CAPTURE THE PANIC ACROSS THE REBOOT. systemd-pstore (on by default)
+  # already archives any pstore record into /var/lib/systemd/pstore on boot —
+  # that's the lightweight backstop and needs nothing here. For a FULL crash
+  # image, kdump reserves a little RAM (crashkernel=) and kexecs a capture
+  # kernel on panic that dumps vmcore. Left commented because it reserves
+  # ~256MB and warrants a conscious rebuild+verify (`cat /proc/cmdline` should
+  # show crashkernel=, and `journalctl -k` a "Reserving ... crashkernel"
+  # line). Enable when you want the next lockup's full trace, not just a
+  # summary:
+  # boot.crashDump.enable = true;
+
+  # (4) DISK HEALTH ALERTING. A stalled SSD/NVMe controller is one of the few
+  # things that can wedge the whole box the way 09-16 looked. smartd polls
+  # SMART and screams (wall) on failing attributes. Note: real off-LAN
+  # alerting should ride the Prometheus stack this host already runs (see
+  # MONITORING) — smartctl_exporter as a scrape target is the natural
+  # follow-up so a dying drive shows up in Grafana Cloud, not just on a
+  # console nobody's watching.
+  services.smartd = {
+    enable = true;
+    autodetect = true;
+    notifications.wall.enable = true;
+  };
+
+  # NOTE on temperature history: no extra logger is needed. node_exporter
+  # (enabled under MONITORING below) already exports node_hwmon_temp_celsius
+  # and thermal-zone metrics to Grafana Cloud, which survive a reboot and are
+  # reachable off-LAN. If it runs hot again, that's where the trend lives —
+  # build/keep a temp panel there rather than logging to local disk that a
+  # freeze would take down with it.
 
   # --- GPU (QuickSync) ---
   # The Jellyfin container ships its own userspace driver; the host only
@@ -155,6 +239,11 @@ in
   # --- HOST SPECIFIC PACKAGES ---
   environment.systemPackages = with pkgs; [
     vim
+    # Diagnostics for the 2026-09-16 freeze follow-up. These were the tools I
+    # reached for and found missing during the post-mortem:
+    smartmontools # smartctl — read NVMe/SATA SMART health (was absent)
+    nvme-cli # nvme smart-log — NVMe-specific wear/error counters, temps
+    lm_sensors # `sensors` — quick temp readout without spelunking /sys/hwmon
   ];
 
   # --- GIT IDENTITY ---
