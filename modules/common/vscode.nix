@@ -3,6 +3,45 @@
 let
   # The custom keybindings need cmd on macOS and ctrl on Linux.
   mod = if pkgs.stdenv.isDarwin then "cmd" else "ctrl";
+
+  # anthropic.claude-code is fetched directly from the VS Code Marketplace
+  # instead of via nix-vscode-extensions below: that input is pinned by
+  # commit in its flake.nix url (see flake.nix) because upstream dropped
+  # x86_64-darwin support afterward, so its extension snapshot is frozen and
+  # won't move on `nix flake update`. Claude Code ships too often to wait on
+  # an unpin, so it needs a manual bump here instead.
+  #
+  # claude-code publishes a DIFFERENT .vsix per platform (confirmed: linux-x64,
+  # linux-arm64, and darwin-x64 all hash differently for the same version) —
+  # fetching without `arch` pulls whatever the Marketplace defaults to, which
+  # is missing webview assets and renders a blank sidebar. Always set `arch`.
+  #
+  # To bump: for each targetPlatform below, run
+  #   nix-prefetch-url "https://anthropic.gallery.vsassets.io/_apis/public/gallery/publisher/anthropic/extension/claude-code/<new-version>/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?targetPlatform=<targetPlatform>"
+  # and update version/sha256 below with the results.
+  claudeCodeVersion = "2.1.281";
+  claudeCodeSha256 = {
+    x86_64-linux = "1swhbs73svabkr90cv54il6kpwnf0kyk20xhl9a75pv0zlkwnz55"; # linux-x64
+    aarch64-linux = "114sdd4mqkig0k61kvn2c9dgj202lwk1kmcrlgj6mw1c4r38shh8"; # linux-arm64
+    x86_64-darwin = "0mby8y8qfx93vr8ydd8ym946iwvix2wibmipfxk1slix8wkhccj6"; # darwin-x64
+  }
+  .${pkgs.stdenv.hostPlatform.system};
+  claudeCodeArch =
+    {
+      x86_64-linux = "linux-x64";
+      aarch64-linux = "linux-arm64";
+      x86_64-darwin = "darwin-x64";
+      aarch64-darwin = "darwin-arm64";
+    }
+    .${pkgs.stdenv.hostPlatform.system};
+
+  claudeCode = pkgs.vscode-utils.extensionFromVscodeMarketplace {
+    publisher = "anthropic";
+    name = "claude-code";
+    version = claudeCodeVersion;
+    arch = claudeCodeArch;
+    sha256 = claudeCodeSha256;
+  };
 in
 {
   programs.vscode = {
@@ -36,7 +75,6 @@ in
         ++ (with pkgs.vscode-marketplace; [
           jnoortheen.nix-ide
           janisdd.vscode-edit-csv
-          anthropic.claude-code
           tomoki1207.pdf
           ahmadawais.shades-of-purple
           bahramjoharshamshiri.hcl-lsp
@@ -48,7 +86,8 @@ in
           ms-python.debugpy
           ms-python.python
           ms-vscode-remote.remote-ssh
-        ]);
+        ])
+        ++ [ claudeCode ];
 
       keybindings = [
         {

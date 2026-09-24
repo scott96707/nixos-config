@@ -30,6 +30,10 @@
     "amdgpu.si_support=1"
     "radeon.si_support=0"
     "amdgpu.dc=1"
+    # Keyboard/mouse go through a USB KVM switch; autosuspend has been
+    # suspected of leaving the USB ports powered down after a KVM toggle,
+    # requiring a reboot to get input back. -1 disables autosuspend entirely.
+    "usbcore.autosuspend=-1"
   ];
 
   # Run aarch64 binaries under QEMU so this x86_64 box can build the Pi's

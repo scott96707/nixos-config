@@ -85,7 +85,6 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/nixos/configuration.nix
-          inputs.homelab-network.nixosModules.homelab-network
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
