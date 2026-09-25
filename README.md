@@ -131,3 +131,38 @@ If the internal **Mule** drive becomes unreachable or "dirty" due to a hard rese
 # Force repair the NTFS metadata
 sudo ntfsfix -d /dev/disk/by-label/Mule
 ```
+
+### After a Freeze or Unexpected Reboot (`dp21`)
+
+On 2026-09-16 `dp21` froze solid after 52 days up and sat dark for ~3h until a
+manual power cycle, leaving no logged cause. The `RELIABILITY & CRASH
+FORENSICS` block in `hosts/dp21/configuration.nix` now (a) auto-recovers via a
+hardware watchdog (~30s) and (b) converts a lockup into a captured panic. When
+it reboots unexpectedly, investigate **from the previous boot** — the current
+boot is post-recovery and clean:
+
+```bash
+# 1. Timeline: when did each boot start/end? A gap = time spent frozen.
+journalctl --list-boots
+
+# 2. The captured panic/lockup trace (the whole point of the new config).
+journalctl -k -b -1 | tail -80          # kernel log from the boot that died
+ls -la /var/lib/systemd/pstore/         # pstore records archived on reboot
+
+# 3. Did the box give any warning before it died? (empty = silent freeze)
+journalctl -b -1 -o short-iso | \
+  grep -iE "soft lockup|hard lockup|hung_task|rcu.*stall|BUG:|Oops|mce|thermal|oom-kill"
+
+# 4. Rule out the usual killers on the live system.
+free -h; df -h /; nvme smart-log /dev/nvme0n1   # memory / disk-full / drive health
+```
+
+**Reading the result:**
+
+* **Trace present** in step 2 → you finally have the cause; act on the specific
+  subsystem it names.
+* **Still empty** → the fault is below the OS (hardware/power). Boot the
+  **Memtest86+** entry (added to the boot menu) to clear RAM, and re-check the
+  BIOS version (`cat /sys/class/dmi/id/bios_version`) against MSI's latest.
+* **Drive/temp trends** live in Grafana Cloud (node_exporter + smartctl_exporter),
+  and survive the reboot — check there for a slow climb before the event.

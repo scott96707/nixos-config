@@ -89,11 +89,14 @@ in
   # already archives any pstore record into /var/lib/systemd/pstore on boot —
   # that's the lightweight backstop and needs nothing here. For a FULL crash
   # image, kdump reserves a little RAM (crashkernel=) and kexecs a capture
-  # kernel on panic that dumps vmcore. Left commented because it reserves
-  # ~256MB and warrants a conscious rebuild+verify (`cat /proc/cmdline` should
-  # show crashkernel=, and `journalctl -k` a "Reserving ... crashkernel"
-  # line). Enable when you want the next lockup's full trace, not just a
-  # summary:
+  # kernel on panic that dumps vmcore. DELIBERATELY LEFT OFF: a vmcore is up
+  # to RAM-sized (multi-GB), written to the 73G root, and a crash *loop* would
+  # write one per reboot — i.e. it's the one mitigation here that can fill the
+  # disk, which is exactly what we're avoiding. pstore already captures the
+  # panic summary (usually enough to name the culprit) at negligible size.
+  # Only enable this for a bounded, supervised debugging window, and pair it
+  # with dump rotation/compression + a size cap so it can't run the root out
+  # of space:
   # boot.crashDump.enable = true;
 
   # (4) DISK HEALTH ALERTING. A stalled SSD/NVMe controller is one of the few
@@ -108,6 +111,15 @@ in
     autodetect = true;
     notifications.wall.enable = true;
   };
+
+  # smartctl_exporter turns the SMART data smartd already reads into Prometheus
+  # metrics (smartctl_device_*, wear, error counters, drive temp) on :9633,
+  # scraped below and streamed to Grafana Cloud. This is the "proper alerting
+  # path" the smartd comment refers to: a dying NVMe shows up on a dashboard
+  # instead of only a wall message to a console nobody watches. Disk-safe — it
+  # emits a handful of metric series; storage is bounded by Prometheus'
+  # existing retention, it does not accumulate files.
+  services.prometheus.exporters.smartctl.enable = true;
 
   # NOTE on temperature history: no extra logger is needed. node_exporter
   # (enabled under MONITORING below) already exports node_hwmon_temp_celsius
@@ -162,6 +174,7 @@ in
       scrapeTargets = [
         "127.0.0.1:9100" # this host
         "10.0.0.200:9100" # the Pi (DNS/vault/VPN box)
+        "127.0.0.1:9633" # smartctl_exporter (drive health, see RELIABILITY)
       ];
       # Stream metrics to Grafana Cloud's free tier so dashboards survive a
       # dp21 reboot and are reachable off-LAN. url + username (Grafana calls
