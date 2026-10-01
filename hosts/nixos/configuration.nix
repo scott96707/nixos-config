@@ -170,6 +170,12 @@
   #   sudo tailscale up
   # (opens a browser link to approve the device in the tailnet).
   services.tailscale.enable = true;
+  # Tailscale SSH: lets me log in from another tailnet device when the local
+  # display/input is wedged after a KVM/monitor-input switch (the box stays up
+  # and on the tailnet, but there was no sshd to get in with). Authenticated
+  # by tailnet identity, no LAN port opened. Requires the tailnet ACL to
+  # allow ssh to this node (the default policy does for your own devices).
+  services.tailscale.extraSetFlags = [ "--ssh" ];
 
   # --- DESKTOP ENVIRONMENT ---
   services.xserver.enable = true;

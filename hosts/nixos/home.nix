@@ -38,6 +38,7 @@
     libreoffice
     lsof
     mpv
+    signal-desktop
     sops
     tcpdump
     transmission_4-qt
