@@ -118,6 +118,11 @@ in
           "editor.formatOnSave" = true;
         };
 
+        # ── Claude Code ───────────────────────────────────────────────────────
+        # Dismissing onboarding writes this key; settings.json is a read-only
+        # nix store symlink, so the write fails and VS Code opens the file.
+        "claudeCode.hideOnboarding" = true;
+
         # ── Editors / diff ───────────────────────────────────────────────────
         "diffEditor.ignoreTrimWhitespace" = false;
         "diffEditor.wordWrap" = "on";
@@ -231,6 +236,9 @@ in
         "extensions.autoCheckUpdates" = false;
 
         # ── Terminal ──────────────────────────────────────────────────────────
+        # Don't block shutdown/logout asking to kill running terminal processes
+        "terminal.integrated.confirmOnExit" = "never";
+        "terminal.integrated.confirmOnKill" = "never";
         "terminal.integrated.cursorStyle" = "line";
         "terminal.integrated.fontFamily" = "JetBrainsMono Nerd Font";
         "terminal.integrated.smoothScrolling" = true;
@@ -251,6 +259,9 @@ in
         };
 
         # ── Window / Workbench ───────────────────────────────────────────────
+        # Never ask before closing; unsaved files survive via hot exit instead
+        "window.confirmBeforeClose" = "never";
+        "files.hotExit" = "onExitAndWindowClose";
         "window.newWindowProfile" = "Default";
         "workbench.activityBar.location" = "bottom";
         "workbench.colorCustomizations" = {

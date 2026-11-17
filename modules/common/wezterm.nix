@@ -35,6 +35,9 @@
 
       config.scrollback_lines = 10000
 
+      -- Don't block shutdown/logout with a "really close this window?" prompt
+      config.window_close_confirmation = 'NeverPrompt'
+
       -- 3. Keybindings
       config.keys = {
         -- OPT+arrows jump by word
