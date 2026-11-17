@@ -19,13 +19,14 @@ let
   # To bump: for each targetPlatform below, run
   #   nix-prefetch-url "https://anthropic.gallery.vsassets.io/_apis/public/gallery/publisher/anthropic/extension/claude-code/<new-version>/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?targetPlatform=<targetPlatform>"
   # and update version/sha256 below with the results.
-  claudeCodeVersion = "2.1.281";
-  claudeCodeSha256 = {
-    x86_64-linux = "1swhbs73svabkr90cv54il6kpwnf0kyk20xhl9a75pv0zlkwnz55"; # linux-x64
-    aarch64-linux = "114sdd4mqkig0k61kvn2c9dgj202lwk1kmcrlgj6mw1c4r38shh8"; # linux-arm64
-    x86_64-darwin = "0mby8y8qfx93vr8ydd8ym946iwvix2wibmipfxk1slix8wkhccj6"; # darwin-x64
-  }
-  .${pkgs.stdenv.hostPlatform.system};
+  claudeCodeVersion = "2.1.326";
+  claudeCodeSha256 =
+    {
+      x86_64-linux = "0cb8in1kkhn0nyl0xm6iwdv4vj8k047jl3izya72gi7xzf1yzw1d"; # linux-x64
+      aarch64-linux = "1h7fzmba21dfdggnx3486cr7c001clvkbrvs5wflzh31v1fdia45"; # linux-arm64
+      x86_64-darwin = "1509wkm25nxbvkwpwx6als74v2q25mjyvv5j0zl55d9430vpxi0l"; # darwin-x64
+    }
+    .${pkgs.stdenv.hostPlatform.system};
   claudeCodeArch =
     {
       x86_64-linux = "linux-x64";
