@@ -47,7 +47,15 @@ in
 {
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode;
+    # On NixOS, GDM autologin leaves the GNOME login keyring locked (no
+    # password is typed to unlock it), so VS Code prompts for the keyring
+    # password on first launch. Use VS Code's own secret store instead.
+    # macOS uses Keychain and is unaffected.
+    package =
+      if pkgs.stdenv.isLinux then
+        pkgs.vscode.override { commandLineArgs = "--password-store=basic"; }
+      else
+        pkgs.vscode;
 
     # Extensions are fully declarative: anything installed through the UI
     # disappears on the next rebuild. Add new extensions here instead.
